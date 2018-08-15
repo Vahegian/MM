@@ -27,3 +27,4 @@ hs_err_pid*
 MM.iml
 .idea/
 src/META-INF/
+*.txt
