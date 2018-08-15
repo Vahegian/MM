@@ -32,18 +32,6 @@ public class Frame extends JFrame {
 
         setFocusable(true);
         setFocusTraversalKeysEnabled(false);
-//        Main.progress[0] = 100;
-//        progress[0]= 100;
-
-//        CoinBuyPanle coinBuyPanle = new CoinBuyPanle(coinCollector,colors);
-//        coinBuyPanle.setBounds(0,20,762,25);
-//        add(coinBuyPanle);
-
-//        AddedCoinsPanel addedCoinsPanel = new AddedCoinsPanel(coinCollector,colors);
-//        addedCoinsPanel.setBounds(0,45,840,675);
-//        addedCoinsPanel.run();
-//        add(addedCoinsPanel);
-
 
         repaint();
 
