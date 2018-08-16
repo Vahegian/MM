@@ -5,6 +5,7 @@ import mm.customObjects.Colors;
 import mm.customObjects.CustTextPane;
 
 import javax.swing.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,7 @@ public class TradeHelperLogic implements Runnable {
     private BinanceController bc;
     private String tableName = "tradeHelper";
     private Map<String, Double> lastPrices;
+    private Double updateTotalAmountNowtemp = 0.0;
 
     public TradeHelperLogic(BinanceController bc){
 
@@ -38,13 +40,13 @@ public class TradeHelperLogic implements Runnable {
         bc.dropTable(tableName);
     }
 
-    public void updateprofits(List<List<Object>> listWithAddeditems) {
-        for (List<Object> l:listWithAddeditems) {
-            String pair = ((JTextField)l.get(0)).getText();
-            Double amount=Double.parseDouble(((JTextField)l.get(1)).getText()),
-                    price = Double.parseDouble(((JTextField)l.get(2)).getText()),
-                    fee= Double.parseDouble((String) l.get(5));
-            updateProfitOfaRow(pair, amount, price, fee, (CustTextPane) l.get(3));
+    public void updateprofits(List<HashMap<String, Object>> listWithAddeditems) {
+        for (HashMap<String,Object> l:listWithAddeditems) {
+            String pair = ((JTextField)l.get("pairfield")).getText();
+            Double amount=Double.parseDouble(((JTextField)l.get("amountfield")).getText()),
+                    price = Double.parseDouble(((JTextField)l.get("curPricefield")).getText()),
+                    fee= Double.parseDouble((String) l.get("fee"));
+            updateProfitOfaRow(pair, amount, price, fee, (CustTextPane) l.get("profitpane"));
         }
     }
 
@@ -70,6 +72,52 @@ public class TradeHelperLogic implements Runnable {
 
     public void stopTheThread(){stopTHLThread[0]=true;}
 
+    public void updateTotalProfit(List<HashMap<String, Object>> listWithAddeditems, CustTextPane totalProfitPane) {
+        Double totalProfit = 0.0;
+        for(HashMap<String, Object> o: listWithAddeditems){
+            String price = ((CustTextPane) o.get("profitpane")).getPlainText();
+//            int length = price.length();
+//            System.out.println(price);
+            totalProfit+= Double.parseDouble(price);
+        }
+        totalProfitPane.setPaneText(totalProfit.toString());
+        if(totalProfit>0) totalProfitPane.setPaneColor(Colors.green,"green");
+        else if(totalProfit<0)totalProfitPane.setPaneColor(Colors.red,"red");
+        else totalProfitPane.setBackground(Colors.black);
+
+    }
+
+    public void updateTotalAmountNow(List<HashMap<String, Object>> listWithAddeditems, CustTextPane totalAmountPane) {
+        Double totalAmount = 0.0;
+        for(HashMap<String, Object> o: listWithAddeditems){
+            String amount = ((JTextField) o.get("amountfield")).getText();
+            Double newPrice = 0.0;
+            synchronized (lastPrices){
+                newPrice = lastPrices.get(((JTextField) o.get("pairfield")).getText());
+            }
+//            int length = price.length();
+//            System.out.println(price);
+            totalAmount+= Double.parseDouble(amount)*newPrice;
+        }
+        totalAmountPane.setPaneText(totalAmount.toString());
+        if(totalAmount>updateTotalAmountNowtemp) totalAmountPane.setPaneColor(Colors.green,"green");
+        else if(totalAmount<updateTotalAmountNowtemp)totalAmountPane.setPaneColor(Colors.red,"red");
+        else totalAmountPane.setPaneColor(Colors.black, "black");
+        updateTotalAmountNowtemp = totalAmount;
+    }
+
+    public void updateTotalAmountBought(List<HashMap<String, Object>> listWithAddeditems, CustTextPane totalAmountBoughtPane) {
+        Double totalAmountBought = 0.0;
+        for(HashMap<String, Object> o: listWithAddeditems){
+            String amount = ((JTextField) o.get("amountfield")).getText();
+            String priceBought = ((JTextField) o.get("curPricefield")).getText();
+
+            totalAmountBought+= Double.parseDouble(amount)*Double.parseDouble(priceBought);
+        }
+        totalAmountBoughtPane.setText(totalAmountBought.toString());
+        totalAmountBoughtPane.setForeground(Colors.blue);
+    }
+
     @Override
     public void run() {
         while (!stopTHLThread[0]) {
@@ -81,20 +129,5 @@ public class TradeHelperLogic implements Runnable {
             }
         }
         System.err.println(TAG+" > Thread Stopped");
-    }
-
-    public void updateTotalProfit(List<List<Object>> listWithAddeditems, CustTextPane totalProfitPane) {
-        Double totalProfit = 0.0;
-        for(List<Object> o: listWithAddeditems){
-            String price = ((CustTextPane) o.get(3)).getPlainText();
-//            int length = price.length();
-//            System.out.println(price);
-            totalProfit+= Double.parseDouble(price);
-        }
-        totalProfitPane.setPaneText(totalProfit.toString());
-        if(totalProfit>0) totalProfitPane.setPaneColor(Colors.green,"green");
-        else if(totalProfit<0)totalProfitPane.setPaneColor(Colors.red,"red");
-        else totalProfitPane.setBackground(Colors.black);
-
     }
 }
