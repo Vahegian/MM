@@ -10,9 +10,7 @@ import mm.startGui.LoadingWindow;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class TradeHelperWindow extends SideFrame implements Runnable{
     private String TAG = "Binance/TradeHelper";
@@ -24,7 +22,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     private JTextArea fee;
     private CustButton addBut;
     private JPanel middlePanel;
-    private List<List<Object>> listWithAddeditems;
+    private List<HashMap<String, Object>> listWithAddeditems;
     private JPanel items;
     private int numperOfItems=-1;
     private TradeHelperLogic thl;
@@ -33,6 +31,8 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     private int ipos;
     private CustTextPane totalProfitPane;
     private JPanel middlePanelHintsPanel;
+    private CustTextPane totalAmountNowPane;
+    private CustTextPane totalAmountBoughtPane;
 
     public TradeHelperWindow(String title, int lx, int ly,BinanceController bc) {
         super(title, lx-320, ly-240, 640, 520);
@@ -41,7 +41,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         new Thread(new LoadingWindow<>(this)).start();
         thl = new TradeHelperLogic(bc);
 
-        listWithAddeditems = new LinkedList<List<Object>>();
+        listWithAddeditems = new LinkedList<HashMap<String, Object>>();
 
 //        thl.makeTable();
 //        thl.dropTheTable();
@@ -87,10 +87,29 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         totalProfitPane = new CustTextPane("0",1,"LEFT" );
         totalProfitPane.setPaneColor(Colors.green,"green");
 
+        JTextArea totalAmountNowHintArea = new JTextArea();
+        totalAmountNowHintArea.setText("Total Amount Now");
+        totalAmountNowHintArea.setBorder(BorderFactory.createEmptyBorder());
+        totalAmountNowHintArea.setEditable(false); totalAmountNowHintArea.setVisible(true);
+
+        totalAmountNowPane = new CustTextPane("0", 1,"LEFT");
+
+        JTextArea totalAmountBoughtHintArea = new JTextArea();
+        totalAmountBoughtHintArea.setText("Total Bought");
+        totalAmountBoughtHintArea.setBorder(BorderFactory.createEmptyBorder());
+        totalAmountBoughtHintArea.setEditable(false); totalAmountBoughtHintArea.setVisible(true);
+
+        totalAmountBoughtPane = new CustTextPane("0", 1,"LEFT");
+
+
         JPanel bottomPanel = new JPanel();
 //        bottomPanel.add(removeAll);
         bottomPanel.add(totalProfitHintArea);
         bottomPanel.add(totalProfitPane);
+        bottomPanel.add(totalAmountNowHintArea);
+        bottomPanel.add(totalAmountNowPane);
+        bottomPanel.add(totalAmountBoughtHintArea);
+        bottomPanel.add(totalAmountBoughtPane);
         bottomPanel.setBounds(0,440,560,40);
         bottomPanel.setBackground(Colors.white);
 
@@ -141,13 +160,13 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
             for (ipos = 0; ipos < listWithAddeditems.size(); ipos++) {
                 ActionListener al = null;
                 try {
-                   al = ((JButton)listWithAddeditems.get(0).get(4)).getActionListeners()[0];
+                   al = ((JButton)listWithAddeditems.get(0).get("removebutton")).getActionListeners()[0];
                 }catch (Exception e){
                     System.err.println(TAG+" "+e);
                 }
 
 
-                JButton bt = (JButton)listWithAddeditems.get(ipos).get(4);
+                JButton bt = (JButton)listWithAddeditems.get(ipos).get("removebutton");
 
                 if(al != null) {
                     bt.removeActionListener(al);
@@ -180,8 +199,8 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     private void addItemsFromlistToDB(){
         thl.dropTheTable();
         thl.makeTable();
-        for(List<Object> l : listWithAddeditems){
-            thl.putDataInTable(((JTextField)(l.get(0))).getText(),((JTextField)(l.get(1))).getText(),((JTextField)(l.get(2))).getText(),(String) l.get(5));
+        for(HashMap<String, Object> l : listWithAddeditems){
+            thl.putDataInTable(((JTextField)(l.get("pairfield"))).getText(),((JTextField)(l.get("amountfield"))).getText(),((JTextField)(l.get("curPricefield"))).getText(),(String) l.get("fee"));
         }
     }
 
@@ -260,7 +279,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     }
 
     private void addItemsFromDBtoMiddlePanel(){
-        listWithAddeditems = new LinkedList<List<Object>>();
+        listWithAddeditems = new LinkedList<HashMap<String, Object>>();
         List<List<String>> dbitems = thl.getTableContent();
         for(List<String> l:dbitems){
             addItemsToList(l.get(0),l.get(1),l.get(2), l.get(3));
@@ -277,12 +296,12 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
                     JPanel items = new JPanel();
                     items.setBounds(0, 0, 640, 40);
                     items.setBackground(Colors.white);
-                    items.add((JTextField)listWithAddeditems.get(i).get(0));
+                    items.add((JTextField)listWithAddeditems.get(i).get("pairfield"));
 //                System.out.println(l.get(0).getText());
-                    items.add((JTextField)listWithAddeditems.get(i).get(1));
-                    items.add((JTextField)listWithAddeditems.get(i).get(2));
-                    items.add((CustTextPane)listWithAddeditems.get(i).get(3));
-                    items.add((JButton)listWithAddeditems.get(i).get(4));
+                    items.add((JTextField)listWithAddeditems.get(i).get("amountfield"));
+                    items.add((JTextField)listWithAddeditems.get(i).get("curPricefield"));
+                    items.add((CustTextPane)listWithAddeditems.get(i).get("profitpane"));
+                    items.add((JButton)listWithAddeditems.get(i).get("removebutton"));
                     middlePanel.add(items);
                     numperOfItems++;
                 }
@@ -293,7 +312,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
     private void addItemsToList(String pairs, String camount, String oprice, String tfee){
 //        listWithAddeditems = new LinkedList<List<Object>>();
-        List<Object> list = new ArrayList<Object>();
+        Map<String,Object> map = new HashMap<String, Object>();
 
         JTextField pair = new JTextField();
         pair.setEditable(false);
@@ -303,7 +322,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         pair.setBorder(BorderFactory.createEmptyBorder());
 
 //        CustTextPane pair = new CustTextPane(pairs,2,"CENTER");
-        list.add(pair);
+        map.put("pairfield",pair);
 
         JTextField amount = new JTextField();
         amount.setEditable(false);
@@ -313,7 +332,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         amount.setBorder(BorderFactory.createEmptyBorder());
 //        CustTextPane amount = new CustTextPane(camount,2,"CENTER");
 
-        list.add(amount);
+        map.put("amountfield",amount);
 
         JTextField curPrice = new JTextField();
         curPrice.setEditable(false);
@@ -324,7 +343,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
 //        CustTextPane curPrice = new CustTextPane(oprice,2,"CENTER");
 
-        list.add(curPrice);
+        map.put("curPricefield",curPrice);
 
 //        JTextField profit = new JTextField();
 //        profit.setEditable(false);
@@ -334,7 +353,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
         CustTextPane profit = new CustTextPane("0",1,"LEFT");
 
-        list.add(profit);
+        map.put("profitpane",profit);
 
         JButton remove = new JButton();
 //        remove.setEditable(false);
@@ -346,9 +365,9 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         remove.setBorder(BorderFactory.createEmptyBorder());
 
 //        CustTextPane remove = new CustTextPane("Remove",2,"CENTER");
-        list.add(remove);
-        list.add(new String(tfee));
-        listWithAddeditems.add(list);
+        map.put("removebutton",remove);
+        map.put("fee",new String(tfee));
+        listWithAddeditems.add((HashMap<String, Object>) map);
     }
 
     private void makeTopPanel() {
@@ -419,6 +438,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     private void updateValues(){
         thl.updateprofits(listWithAddeditems);
         thl.updateTotalProfit(listWithAddeditems, totalProfitPane);
+        thl.updateTotalAmountNow(listWithAddeditems, totalAmountNowPane);
     }
 
 
@@ -427,6 +447,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     public void run() {
         try {
             Thread.sleep(3000);
+            thl.updateTotalAmountBought(listWithAddeditems, totalAmountBoughtPane);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
