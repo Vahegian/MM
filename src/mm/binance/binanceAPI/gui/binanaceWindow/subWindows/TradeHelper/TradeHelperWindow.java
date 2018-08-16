@@ -416,6 +416,10 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         }
     }
 
+    private void updateValues(){
+        thl.updateprofits(listWithAddeditems);
+        thl.updateTotalProfit(listWithAddeditems, totalProfitPane);
+    }
 
 
 
@@ -428,8 +432,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         }
         while (windowsStates[windowNumber[0]]) {
             try {
-                thl.updateprofits(listWithAddeditems);
-                thl.updateTotalProfit(listWithAddeditems, totalProfitPane);
+                updateValues();
                 checkState(this);
                 repaint();
                 Thread.sleep(1500);
