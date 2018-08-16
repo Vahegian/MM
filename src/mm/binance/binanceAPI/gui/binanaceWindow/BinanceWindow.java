@@ -49,9 +49,10 @@ public class BinanceWindow extends SideFrame implements Runnable {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if(cpw==null || !cpw.isShowing()) {
-                            new Thread(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc)).start();
-                        }else cpw.requestFocus();
+                        openCoinPricesWindow();
+//                        if(cpw==null || !cpw.isShowing()) {
+//                            new Thread(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc)).start();
+//                        }else cpw.requestFocus();
                     }
                 }).start();
             }
@@ -63,6 +64,7 @@ public class BinanceWindow extends SideFrame implements Runnable {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+                        openCoinPricesWindow();
                         if(thw==null || !thw.isShowing()) {
                             new Thread(thw = new TradeHelperWindow("Trade Helper", (dim.width/2), (dim.height/2), bc)).start();
                         }else thw.requestFocus();
@@ -80,6 +82,12 @@ public class BinanceWindow extends SideFrame implements Runnable {
 //        System.out.println(bc.getAccountBalance());
 
 
+    }
+
+    private void openCoinPricesWindow() {
+        if(cpw==null || !cpw.isShowing()) {
+            new Thread(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc)).start();
+        }else cpw.requestFocus();
     }
 
     @Override
