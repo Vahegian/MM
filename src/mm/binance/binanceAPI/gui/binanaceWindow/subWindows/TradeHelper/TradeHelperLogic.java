@@ -5,6 +5,7 @@ import mm.customObjects.Colors;
 import mm.customObjects.CustTextPane;
 
 import javax.swing.*;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,7 +100,8 @@ public class TradeHelperLogic implements Runnable {
 //            System.out.println(price);
             totalAmount+= Double.parseDouble(amount)*newPrice;
         }
-        totalAmountPane.setPaneText(totalAmount.toString());
+        String price = totalAmount.toString();
+        totalAmountPane.setPaneText(price);
         if(totalAmount>updateTotalAmountNowtemp) totalAmountPane.setPaneColor(Colors.green,"green");
         else if(totalAmount<updateTotalAmountNowtemp)totalAmountPane.setPaneColor(Colors.red,"red");
         else totalAmountPane.setPaneColor(Colors.black, "black");
@@ -114,7 +116,7 @@ public class TradeHelperLogic implements Runnable {
 
             totalAmountBought+= Double.parseDouble(amount)*Double.parseDouble(priceBought);
         }
-        totalAmountBoughtPane.setText(totalAmountBought.toString());
+        totalAmountBoughtPane.setText("$"+new DecimalFormat("#0.00000").format(totalAmountBought));
         totalAmountBoughtPane.setForeground(Colors.blue);
     }
 

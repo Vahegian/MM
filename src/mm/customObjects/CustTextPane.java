@@ -42,7 +42,13 @@ public class CustTextPane extends JTextPane {
             else throw new IllegalArgumentException("Wrong Type!");
         }else if (align.equals(new String ("LEFT"))){
             if (type == 1) {
-                text = new DecimalFormat("#0.00000").format(Double.parseDouble(text));
+                text = new DecimalFormat("#000.00000").format(Double.parseDouble(text));
+                if(text.length()<10){
+//                    System.err.println(text+" : "+text.length());
+                    for(int i=0; i<10-text.length(); i++){
+                        text+='0';
+                    }
+                }
                 this.setText("     \u0024" + text);
             } else if (type == 2)
                 this.setText("     "+text);

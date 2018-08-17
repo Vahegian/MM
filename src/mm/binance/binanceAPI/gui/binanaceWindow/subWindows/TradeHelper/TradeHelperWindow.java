@@ -8,9 +8,11 @@ import mm.customObjects.SideFrame;
 import mm.startGui.LoadingWindow;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
+import java.util.List;
 
 public class TradeHelperWindow extends SideFrame implements Runnable{
     private String TAG = "Binance/TradeHelper";
@@ -46,7 +48,6 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 //        thl.makeTable();
 //        thl.dropTheTable();
         makeGui();
-        addItemsFromDBtoMiddlePanel();
         try {
             progress[0]=90;
             Thread.sleep(3000);
@@ -67,6 +68,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         makeTopPanel();
         makeMiddlePanel();
         putMiddlePanlelInScrollView();
+        addItemsFromDBtoMiddlePanel();
         makeBottomPanel();
         repaint();
     }
@@ -216,17 +218,18 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
         middlePanel = new JPanel();
         middlePanel.setVisible(true);
-        middlePanel.setBackground(Colors.white);
+        middlePanel.setBackground(Colors.lightBlue);
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
     }
 
     private void addHintsToMiddlePanelHintPanel() {
+        int colNum = 10;
         JTextField pairHint = new JTextField();
         pairHint.setEditable(false);
         pairHint.setBackground(Colors.white);
         pairHint.setForeground(Colors.blue);
         pairHint.setText("Pairs");
-        pairHint.setColumns(10);
+        pairHint.setColumns(colNum);
         pairHint.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField amountHint = new JTextField();
@@ -234,7 +237,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         amountHint.setBackground(Colors.white);
         amountHint.setForeground(Colors.blue);
         amountHint.setText("Amount");
-        amountHint.setColumns(10);
+        amountHint.setColumns(colNum);
         amountHint.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField priceOfOneHint = new JTextField();
@@ -242,7 +245,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         priceOfOneHint.setBackground(Colors.white);
         priceOfOneHint.setForeground(Colors.blue);
         priceOfOneHint.setText("Price bought/$");
-        priceOfOneHint.setColumns(10);
+        priceOfOneHint.setColumns(colNum);
         priceOfOneHint.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField profitHint = new JTextField();
@@ -250,22 +253,22 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         profitHint.setBackground(Colors.white);
         profitHint.setForeground(Colors.blue);
         profitHint.setText("Profit - Loss");
-        profitHint.setColumns(10);
+        profitHint.setColumns(13);
         profitHint.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField removeHint = new JTextField();
         removeHint.setEditable(false);
         removeHint.setBackground(Colors.white);
         removeHint.setForeground(Colors.blue);
-        removeHint.setText("Remove Row");
-        removeHint.setColumns(10);
+        removeHint.setText("          ");
+        removeHint.setColumns(1);
         removeHint.setBorder(BorderFactory.createEmptyBorder());
 
         middlePanelHintsPanel.add(pairHint);
         middlePanelHintsPanel.add(amountHint);
         middlePanelHintsPanel.add(priceOfOneHint);
         middlePanelHintsPanel.add(profitHint);
-//        middlePanelHintsPanel.add(removeHint);
+        middlePanelHintsPanel.add(removeHint);
     }
 
     private void putMiddlePanlelInScrollView(){
@@ -274,7 +277,8 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         sp.setBorder(BorderFactory.createEmptyBorder());
         sp.setBounds(0,80,640,360);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+//        sp.setBackground(Colors.lightBlue);
         add(sp);
     }
 
@@ -291,23 +295,33 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         if(listWithAddeditems !=null){
 //            System.out.println(listWithAddeditems.size());
             for (int i =0; i<listWithAddeditems.size(); i++){
-//                System.out.println(l.size());
                 if(i>numperOfItems) {
                     JPanel items = new JPanel();
                     items.setBounds(0, 0, 640, 40);
                     items.setBackground(Colors.white);
+//                    FlowLayout fl = new FlowLayout();
+//                    fl.setHgap(5);
+//                    fl.setAlignment(FlowLayout.LEFT);
+//                    items.setLayout(fl);
+//                    ((JTextField)listWithAddeditems.get(i).get("pairfield")).setColumns(10);
                     items.add((JTextField)listWithAddeditems.get(i).get("pairfield"));
 //                System.out.println(l.get(0).getText());
+//                    ((JTextField)listWithAddeditems.get(i).get("amountfield")).setColumns(10);
                     items.add((JTextField)listWithAddeditems.get(i).get("amountfield"));
+//                    ((JTextField)listWithAddeditems.get(i).get("curPricefield")).setColumns(10);
                     items.add((JTextField)listWithAddeditems.get(i).get("curPricefield"));
+//                    ((CustTextPane)listWithAddeditems.get(i).get("profitpane")).setMaximumSize(panedim);
                     items.add((CustTextPane)listWithAddeditems.get(i).get("profitpane"));
-                    items.add((JButton)listWithAddeditems.get(i).get("removebutton"));
+//                    ((JButton)listWithAddeditems.get(i).get("removebutton"))
+                    items.add((JButton)listWithAddeditems.get(i).get("removebutton"), BorderLayout.LINE_END);
+//                    items.setLayout(null);
                     middlePanel.add(items);
                     numperOfItems++;
                 }
 
             }
         }
+
     }
 
     private void addItemsToList(String pairs, String camount, String oprice, String tfee){
