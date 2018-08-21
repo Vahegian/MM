@@ -43,11 +43,11 @@ public class TradeHelperLogic implements Runnable {
 
     public void updateprofits(List<HashMap<String, Object>> listWithAddeditems) {
         for (HashMap<String,Object> l:listWithAddeditems) {
-            String pair = ((JTextField)l.get("pairfield")).getText();
-            Double amount=Double.parseDouble(((JTextField)l.get("amountfield")).getText()),
-                    price = Double.parseDouble(((JTextField)l.get("curPricefield")).getText()),
-                    fee= Double.parseDouble((String) l.get("fee"));
-            updateProfitOfaRow(pair, amount, price, fee, (CustTextPane) l.get("profitpane"));
+            String pair = ((JTextField)l.get(TradeHelperWindow.PAIRKEY)).getText();
+            Double amount=Double.parseDouble(((JTextField)l.get(TradeHelperWindow.AMOUNTKEY)).getText()),
+                    price = Double.parseDouble(((JTextField)l.get(TradeHelperWindow.PRICEKEY)).getText()),
+                    fee= Double.parseDouble((String) l.get(TradeHelperWindow.FEEKEY));
+            updateProfitOfaRow(pair, amount, price, fee, (CustTextPane) l.get(TradeHelperWindow.PROFITKEY));
         }
     }
 
@@ -76,7 +76,7 @@ public class TradeHelperLogic implements Runnable {
     public void updateTotalProfit(List<HashMap<String, Object>> listWithAddeditems, CustTextPane totalProfitPane) {
         Double totalProfit = 0.0;
         for(HashMap<String, Object> o: listWithAddeditems){
-            String price = ((CustTextPane) o.get("profitpane")).getPlainText();
+            String price = ((CustTextPane) o.get(TradeHelperWindow.PROFITKEY)).getPlainText();
 //            int length = price.length();
 //            System.out.println(price);
             totalProfit+= Double.parseDouble(price);
@@ -91,10 +91,10 @@ public class TradeHelperLogic implements Runnable {
     public void updateTotalAmountNow(List<HashMap<String, Object>> listWithAddeditems, CustTextPane totalAmountPane) {
         Double totalAmount = 0.0;
         for(HashMap<String, Object> o: listWithAddeditems){
-            String amount = ((JTextField) o.get("amountfield")).getText();
+            String amount = ((JTextField) o.get(TradeHelperWindow.AMOUNTKEY)).getText();
             Double newPrice = 0.0;
             synchronized (lastPrices){
-                newPrice = lastPrices.get(((JTextField) o.get("pairfield")).getText());
+                newPrice = lastPrices.get(((JTextField) o.get(TradeHelperWindow.PAIRKEY)).getText());
             }
 //            int length = price.length();
 //            System.out.println(price);
@@ -111,8 +111,8 @@ public class TradeHelperLogic implements Runnable {
     public void updateTotalAmountBought(List<HashMap<String, Object>> listWithAddeditems, CustTextPane totalAmountBoughtPane) {
         Double totalAmountBought = 0.0;
         for(HashMap<String, Object> o: listWithAddeditems){
-            String amount = ((JTextField) o.get("amountfield")).getText();
-            String priceBought = ((JTextField) o.get("curPricefield")).getText();
+            String amount = ((JTextField) o.get(TradeHelperWindow.AMOUNTKEY)).getText();
+            String priceBought = ((JTextField) o.get(TradeHelperWindow.PRICEKEY)).getText();
 
             totalAmountBought+= Double.parseDouble(amount)*Double.parseDouble(priceBought);
         }
