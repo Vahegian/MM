@@ -136,31 +136,35 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 
         market = bc.getLastPrices();
-
-        for (String coin : market.keySet()) {
-            JPanel jp = new JPanel();
-            jp.setBackground(Colors.white);
+        try {
+            for (String coin : market.keySet()) {
+                JPanel jp = new JPanel();
+                jp.setBackground(Colors.white);
 //            jp.setLayout(new FlowLayout(FlowLayout.LEFT, 40,0));
-            jp.setLayout(null);
-            CustTextPane cText = new CustTextPane(coin,2, "LEFT");
-            cText.setBounds(0,0,120,40);
-            cText.setPaneColor(Colors.blue, "blue");
-            jp.add(cText);
+                jp.setLayout(null);
+                CustTextPane cText = new CustTextPane(coin, 2, "LEFT");
+                cText.setBounds(0, 0, 120, 40);
+                cText.setPaneColor(Colors.blue, "blue");
+                jp.add(cText);
 
-            try {
-                CustTextPane pText = new CustTextPane(market.get(coin) + "", 1, "LEFT");
-                pText.setBounds(120, 0, 120, 40);
-                jp.add(pText);
-                coinNpaneMap.put(coin, pText);
-                if(progress[0]<100)
-                    progress[0]+=50/market.keySet().size();
-            }catch (Exception e){
-                System.err.println("CoinCapWindow: putCoin- pText=> "+e);
-                showNetworkDialgue = true;
+                try {
+                    CustTextPane pText = new CustTextPane(market.get(coin) + "", 1, "LEFT");
+                    pText.setBounds(120, 0, 120, 40);
+                    jp.add(pText);
+                    coinNpaneMap.put(coin, pText);
+                    if (progress[0] < 100)
+                        progress[0] += 50 / market.keySet().size();
+                } catch (Exception e) {
+                    System.err.println("CoinCapWindow: putCoin- pText=> " + e);
+                    showNetworkDialgue = true;
+                }
+
+                mainPanel.add(jp);
+                prevPricesMap.put(coin, 0.0);
             }
-
-            mainPanel.add(jp);
-            prevPricesMap.put(coin,0.0);
+        }catch (Exception e){
+            System.err.println(TAG+"/ putCoins > "+e);
+            progress[0]=110;
         }
 
         if(showNetworkDialgue){

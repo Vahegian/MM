@@ -15,7 +15,7 @@ public class CustTextPane extends JTextPane {
     private String text;
     private String dir = "";
     private int type;
-
+    public boolean withDollarSign = true;
     public CustTextPane(String tx, int type, String alignment){
         this.text = tx;
         this.type = type;
@@ -49,7 +49,8 @@ public class CustTextPane extends JTextPane {
                         text+='0';
                     }
                 }
-                this.setText("     \u0024" + text);
+                if(withDollarSign) this.setText("     \u0024" + text);
+                else this.setText("     " + text);
             } else if (type == 2)
                 this.setText("     "+text);
             else throw new IllegalArgumentException("Wrong Type!");

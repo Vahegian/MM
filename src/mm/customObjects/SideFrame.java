@@ -5,7 +5,7 @@ import mm.mainWindow.OtherButtonsPanel;
 import javax.swing.*;
 
 public abstract class SideFrame extends JFrame {
-//    private int x,y;
+    public int sx,sy;
     protected JScrollPane sp;
 //    public static boolean state = true;
     protected final int [] windowNumber = new int[1];
@@ -15,7 +15,7 @@ public abstract class SideFrame extends JFrame {
     public final int[] progress = {0};
 
     public SideFrame(String title, int lx, int ly, int sX, int sY) {
-//        this.x = lx; this.y = ly;
+        this.sx = sX; this.sy = sY;
         setLayout(null);
 //        setContentPane(sp);
         setBounds(lx,ly,sX,sY);

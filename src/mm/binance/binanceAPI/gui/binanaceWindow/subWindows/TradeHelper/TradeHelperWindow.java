@@ -36,15 +36,18 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     private CustTextPane totalAmountNowPane;
     private CustTextPane totalAmountBoughtPane;
 
-    public static final String PAIRKEY="pairfield";
-    public static final String AMOUNTKEY="amountfield";
-    public static final String PRICEKEY="curPricefield";
-    public static final String PROFITKEY="profitpane";
-    public static final String REMOVEBUTKEY="removebutton";
-    public static final String FEEKEY="fee";
+    static final String PAIRKEY="pairfield";
+    static final String AMOUNTKEY="amountfield";
+    static final String PRICEKEY="curPricefield";
+    static final String PROFITKEY="profitpane";
+    static final String REMOVEBUTKEY="removebutton";
+    static final String FEEKEY="fee";
+    static final String HOWMANYPANEKEY = "howmanymore";
+    static final String HOWMUCHISTOTALPANEKEY = "rowtotal";
+
 
     public TradeHelperWindow(String title, int lx, int ly,BinanceController bc) {
-        super(title, lx-320, ly-240, 640, 520);
+        super(title, lx-370, ly-240, 740, 520);
         windowNumber[0]=2;
         this.bc=bc;
         new Thread(new LoadingWindow<>(this)).start();
@@ -54,7 +57,12 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
 //        thl.makeTable();
 //        thl.dropTheTable();
-        makeGui();
+        try {
+            makeGui();
+        }catch (Exception e){
+            System.err.println(TAG+"> "+e);
+            progress[0]=110;
+        }
         try {
             progress[0]=90;
             Thread.sleep(3000);
@@ -63,7 +71,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         }
         addListenersToObjects();
         setVisible(true);
-        progress[0]=110;
+//        progress[0]=110;
         windowsStates[windowNumber[0]]=true;
         new Thread(thl).start();
         repaint();
@@ -81,11 +89,11 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     }
 
     private void makeBottomPanel() {
-        removeAll = new  CustButton("Remove All",0,0,640,40);
+        removeAll = new  CustButton("Remove All",0,0,sx,40);
         removeAll.setBorder(BorderFactory.createEmptyBorder());
         removeAll.setBounds(560,440,80,40);
         removeAll.setForeground(Colors.red);
-        add(removeAll);
+//        add(removeAll);
         removeAll.setVisible(true);
 
         JTextArea totalProfitHintArea = new JTextArea();
@@ -119,7 +127,8 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         bottomPanel.add(totalAmountNowPane);
         bottomPanel.add(totalAmountBoughtHintArea);
         bottomPanel.add(totalAmountBoughtPane);
-        bottomPanel.setBounds(0,440,560,40);
+        bottomPanel.add(removeAll);
+        bottomPanel.setBounds(0,440,sx,40);
         bottomPanel.setBackground(Colors.white);
 
         add(bottomPanel);
@@ -218,7 +227,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         middlePanelHintsPanel.setBackground(Colors.white);
 //        middlePanelHintsPanel.setLayout(new BoxLayout(middlePanelHintsPanel, BoxLayout.X_AXIS));
         middlePanelHintsPanel.setVisible(true);
-        middlePanelHintsPanel.setBounds(0,40,640,40);
+        middlePanelHintsPanel.setBounds(0,40,sx,40);
         addHintsToMiddlePanelHintPanel();
         add(middlePanelHintsPanel);
 
@@ -260,8 +269,24 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         profitHint.setBackground(Colors.white);
         profitHint.setForeground(Colors.blue);
         profitHint.setText("Profit - Loss");
-        profitHint.setColumns(13);
+        profitHint.setColumns(colNum);
         profitHint.setBorder(BorderFactory.createEmptyBorder());
+
+        JTextField howManyHint = new JTextField();
+        howManyHint.setEditable(false);
+        howManyHint.setBackground(Colors.white);
+        howManyHint.setForeground(Colors.blue);
+        howManyHint.setText("Can Buy");
+        howManyHint.setColumns(colNum);
+        howManyHint.setBorder(BorderFactory.createEmptyBorder());
+
+        JTextField totalHint = new JTextField();
+        totalHint.setEditable(false);
+        totalHint.setBackground(Colors.white);
+        totalHint.setForeground(Colors.blue);
+        totalHint.setText("Total $");
+        totalHint.setColumns(colNum);
+        totalHint.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField removeHint = new JTextField();
         removeHint.setEditable(false);
@@ -275,6 +300,8 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         middlePanelHintsPanel.add(amountHint);
         middlePanelHintsPanel.add(priceOfOneHint);
         middlePanelHintsPanel.add(profitHint);
+        middlePanelHintsPanel.add(howManyHint);
+        middlePanelHintsPanel.add(totalHint);
         middlePanelHintsPanel.add(removeHint);
     }
 
@@ -282,7 +309,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         sp = new JScrollPane(middlePanel);
         sp.setBackground(Colors.white);
         sp.setBorder(BorderFactory.createEmptyBorder());
-        sp.setBounds(0,80,640,360);
+        sp.setBounds(0,80,sx,360);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 //        sp.setBackground(Colors.lightBlue);
@@ -320,6 +347,8 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 //                    ((CustTextPane)listWithAddeditems.get(i).get("profitpane")).setMaximumSize(panedim);
                     items.add((CustTextPane)listWithAddeditems.get(i).get(PROFITKEY));
 //                    ((JButton)listWithAddeditems.get(i).get("removebutton"))
+                    items.add((CustTextPane)listWithAddeditems.get(i).get(HOWMANYPANEKEY));
+                    items.add((CustTextPane)listWithAddeditems.get(i).get(HOWMUCHISTOTALPANEKEY));
                     items.add((JButton)listWithAddeditems.get(i).get(REMOVEBUTKEY), BorderLayout.LINE_END);
 //                    items.setLayout(null);
                     middlePanel.add(items);
@@ -376,6 +405,13 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
         map.put(PROFITKEY,profit);
 
+        CustTextPane howManyCanBuy = new CustTextPane("0", 1, "LEFT");
+        howManyCanBuy.withDollarSign=false;
+        map.put(HOWMANYPANEKEY, howManyCanBuy);
+
+        CustTextPane howMuchTotalIs = new CustTextPane("0", 1,"LEFT");
+        map.put(HOWMUCHISTOTALPANEKEY, howMuchTotalIs);
+
         JButton remove = new JButton();
 //        remove.setEditable(false);
         remove.setForeground(Colors.red);
@@ -393,7 +429,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
     private void makeTopPanel() {
         JPanel userInputPanel = new JPanel();
-        userInputPanel.setBounds(0,0,640,40);
+        userInputPanel.setBounds(0,0, sx,40);
         userInputPanel.setBackground(Colors.white);
         coinTypeCombo = new JComboBox<String>();
         coinTypeCombo.setBackground(Colors.white);
@@ -460,6 +496,8 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         thl.updateprofits(listWithAddeditems);
         thl.updateTotalProfit(listWithAddeditems, totalProfitPane);
         thl.updateTotalAmountNow(listWithAddeditems, totalAmountNowPane);
+        thl.updateHowManyCanBuy(listWithAddeditems);
+        thl.updateTotalOfaRow(listWithAddeditems);
     }
 
 

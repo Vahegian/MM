@@ -5,6 +5,7 @@ import mm.customObjects.Colors;
 import mm.customObjects.CustTextPane;
 
 import javax.swing.*;
+import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +18,7 @@ public class TradeHelperLogic implements Runnable {
     private String tableName = "tradeHelper";
     private Map<String, Double> lastPrices;
     private Double updateTotalAmountNowtemp = 0.0;
+    private Map<JTextField, Double> tempHowMuchIsTotal = new HashMap<JTextField, Double>() ;
 
     public TradeHelperLogic(BinanceController bc){
 
@@ -131,5 +133,54 @@ public class TradeHelperLogic implements Runnable {
             }
         }
         System.err.println(TAG+" > Thread Stopped");
+    }
+
+    public void updateHowManyCanBuy(List<HashMap<String, Object>> listWithAddeditems) {
+        for(HashMap<String, Object> o : listWithAddeditems) {
+            Double profit = Double.parseDouble(((CustTextPane)o.get(TradeHelperWindow.PROFITKEY)).getPlainText());
+            Double currentPrice = lastPrices.get(((JTextField)o.get(TradeHelperWindow.PAIRKEY)).getText());
+            Double fee = Double.parseDouble((String) o.get(TradeHelperWindow.FEEKEY));
+            Double profitAfterFee = profit - ((fee/100)*profit);
+            Double total = (profitAfterFee/currentPrice);
+            setHowManyCanBuyPaneText(o.get(TradeHelperWindow.HOWMANYPANEKEY),total);
+        }
+    }
+
+    private void setHowManyCanBuyPaneText(Object o, Double total) {
+        CustTextPane quantity =(CustTextPane) o;
+        if(total>0){
+            quantity.setPaneText(total+"");
+            quantity.setPaneColor(Colors.green, "green");
+        }else if(total<0){
+//            total*=-1;
+            quantity.setPaneText("0");
+            quantity.setPaneColor(Colors.red, "red");
+        }
+    }
+
+    public void updateTotalOfaRow(List<HashMap<String, Object>> listWithAddeditems) {
+        for(HashMap<String,Object> o:listWithAddeditems){
+            String pairkey = ((JTextField)o.get(TradeHelperWindow.PAIRKEY)).getText();
+            Double amount = Double.parseDouble(((JTextField)o.get(TradeHelperWindow.AMOUNTKEY)).getText());
+            Double total = amount*lastPrices.get(pairkey);
+            setHowMuchIsTotalPaneText(o.get(TradeHelperWindow.HOWMUCHISTOTALPANEKEY), (JTextField)o.get(TradeHelperWindow.PAIRKEY), total);
+        }
+    }
+
+    private void setHowMuchIsTotalPaneText(Object o, JTextField pairkey, Double total) {
+        CustTextPane totalOfaRow =(CustTextPane) o;
+        if(!(tempHowMuchIsTotal.containsKey(pairkey))){
+            tempHowMuchIsTotal.put(pairkey,0.0);
+        }
+
+        if(total>tempHowMuchIsTotal.get(pairkey)){
+            totalOfaRow.setPaneText(total+"");
+            totalOfaRow.setPaneColor(Colors.green, "green");
+        }else if(total< tempHowMuchIsTotal.get(pairkey)){
+//            total*=-1;
+            totalOfaRow.setPaneText(total+"");
+            totalOfaRow.setPaneColor(Colors.red, "red");
+        }else totalOfaRow.setPaneColor(Colors.black,"black");
+        tempHowMuchIsTotal.replace(pairkey, total);
     }
 }
