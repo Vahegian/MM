@@ -122,19 +122,6 @@ public class TradeHelperLogic implements Runnable {
         totalAmountBoughtPane.setForeground(Colors.blue);
     }
 
-    @Override
-    public void run() {
-        while (!stopTHLThread[0]) {
-            try {
-                getLastPrices();
-                Thread.sleep(1500);
-            } catch (InterruptedException e) {
-                System.err.println(TAG+": "+e);
-            }
-        }
-        System.err.println(TAG+" > Thread Stopped");
-    }
-
     public void updateHowManyCanBuy(List<HashMap<String, Object>> listWithAddeditems) {
         for(HashMap<String, Object> o : listWithAddeditems) {
             Double profit = Double.parseDouble(((CustTextPane)o.get(TradeHelperWindow.PROFITKEY)).getPlainText());
@@ -182,5 +169,18 @@ public class TradeHelperLogic implements Runnable {
             totalOfaRow.setPaneColor(Colors.red, "red");
         }else totalOfaRow.setPaneColor(Colors.black,"black");
         tempHowMuchIsTotal.replace(pairkey, total);
+    }
+
+    @Override
+    public void run() {
+        while (!stopTHLThread[0]) {
+            try {
+                getLastPrices();
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                System.err.println(TAG+": "+e);
+            }
+        }
+        System.err.println(TAG+" > Thread Stopped");
     }
 }
