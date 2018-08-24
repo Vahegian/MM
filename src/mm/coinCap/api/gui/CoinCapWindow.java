@@ -181,7 +181,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
 //                    progress[0]+=100/market.keySet().size();
 //                }
             }catch (Exception e){
-                System.err.println("CoinCapWindow: putCoin- pText=> "+e);
+                System.err.println("CoinCapWindow: putCoins pText=> "+e);
                 showNetworkDialgue = true;
             }
 
