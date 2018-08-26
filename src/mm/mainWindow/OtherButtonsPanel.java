@@ -55,7 +55,7 @@ public class OtherButtonsPanel extends JPanel {
                         if(backupWindow==null || !backupWindow.isShowing()) {
                             if(coinCap!=null) coinCap.dispose();
                             if(binance!=null) binance.dispose();
-                            backupWindow = new BackupWindow("Back Up", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 70), 450, 70);
+                            backupWindow = new BackupWindow("Back Up", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 100), 450, 70);
                         }else if(whatToDoIfOpen.equals("FOCUS")){ backupWindow.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ backupWindow.dispose();}
                     }
@@ -93,7 +93,7 @@ public class OtherButtonsPanel extends JPanel {
                     @Override
                     public void run() {
                         if(binance == null || !binance.isShowing()) {
-                            binance = new BinanceWindow("Binanace", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 70), 450, 70, db);
+                            binance = new BinanceWindow("Binanace", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 100), 450, 70, db);
                             new Thread(binance).start();
                         }else if(whatToDoIfOpen.equals("FOCUS")) { binance.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ binance.dispose();}
