@@ -57,9 +57,10 @@ public class Frame extends JFrame {
     }
     private void getDBnUser(){
         String user= JOptionPane.showInputDialog("Input db user: ");
+        if(user.length()<1) System.exit(0);
         String pass = JOptionPane.showInputDialog("Input password: ");
         String dbname= JOptionPane.showInputDialog("Input DB name: ");
-        if(dbname.length()<1) System.exit(1);
+        if(dbname.length()<1) System.exit(0);
         try {
             db = new DatabaseController(dbname, user, pass);
         }catch (Exception e){
