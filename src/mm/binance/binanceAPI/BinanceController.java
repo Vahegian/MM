@@ -9,7 +9,7 @@ import mm.database.DatabaseController;
 import javax.management.openmbean.InvalidKeyException;
 import java.util.*;
 
-public class BinanceController {
+public class BinanceController implements Runnable{
     private String TAG = "BinanceController";
     public boolean threadState = true;
 
@@ -170,24 +170,24 @@ public class BinanceController {
 
 
 
-    public Thread updateThread = new Thread(new Runnable() {
-//        boolean t = true;
-        @Override
-        public void run() {
-            while (threadState) {
-                try {
-                    synchronized (orderBookMap) {
-                        updateLastPrices();
-                    }
-                    Thread.sleep(2000);
-//                    if(t){isloaded = true; t=false;}
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            System.err.println(TAG+" > update Thread stopped");
-        }
-    });
+//    public Thread updateThread = new Thread(new Runnable() {
+////        boolean t = true;
+//        @Override
+//        public void run() {
+//            while (threadState) {
+//                try {
+//                    synchronized (orderBookMap) {
+//                        updateLastPrices();
+//                    }
+//                    Thread.sleep(2000);
+////                    if(t){isloaded = true; t=false;}
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            System.err.println(TAG+" > update Thread stopped");
+//        }
+//    });
 
     public List<List<String>> getTradeTableContent(String tablename) {
         return db.getTradeTableContent(tablename);
@@ -195,5 +195,21 @@ public class BinanceController {
 
     public void dropTable(String tableName) {
         db.dropTable(tableName);
+    }
+
+    @Override
+    public void run() {
+        while (threadState) {
+            try {
+                synchronized (orderBookMap) {
+                    updateLastPrices();
+                }
+                Thread.sleep(2000);
+//                    if(t){isloaded = true; t=false;}
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        System.err.println(TAG+" > update Thread stopped");
     }
 }

@@ -1,5 +1,6 @@
 package mm.mainWindow;
 
+import mm.Main;
 import mm.database.DatabaseController;
 import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
@@ -49,7 +50,7 @@ public class OtherButtonsPanel extends JPanel {
         bt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new Thread(new Runnable() {
+                Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
                         if(backupWindow==null || !backupWindow.isShowing()) {
@@ -59,7 +60,7 @@ public class OtherButtonsPanel extends JPanel {
                         }else if(whatToDoIfOpen.equals("FOCUS")){ backupWindow.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ backupWindow.dispose();}
                     }
-                }).start();
+                });
             }
         });
     }
@@ -70,16 +71,17 @@ public class OtherButtonsPanel extends JPanel {
         bt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new Thread(new Runnable() {
+                Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
                         if(coinCap==null || !coinCap.isShowing()) {
                             coinCap = new CoinCapWindow("CoinMarketCap", screenDim[0] + (screenDim[0] - 240), 0, db);
-                            new Thread(coinCap).start();
+                            Main.workers.submit(coinCap);
+//                            new Thread(coinCap).start();
                         }else if(whatToDoIfOpen.equals("FOCUS")){ coinCap.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ coinCap.dispose();}
                     }
-                }).start();
+                });
             }
         });
     }
@@ -89,16 +91,16 @@ public class OtherButtonsPanel extends JPanel {
         bt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new Thread(new Runnable() {
+                Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
                         if(binance == null || !binance.isShowing()) {
                             binance = new BinanceWindow("Binanace", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 100), 450, 70, db);
-                            new Thread(binance).start();
+                            Main.workers.submit(binance);
                         }else if(whatToDoIfOpen.equals("FOCUS")) { binance.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ binance.dispose();}
                     }
-                }).start();
+                });
             }
         });
     }

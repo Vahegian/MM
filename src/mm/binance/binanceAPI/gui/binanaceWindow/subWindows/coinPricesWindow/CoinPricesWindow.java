@@ -1,5 +1,6 @@
 package mm.binance.binanceAPI.gui.binanaceWindow.subWindows.coinPricesWindow;
 
+import mm.Main;
 import mm.binance.binanceAPI.BinanceController;
 import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
@@ -30,7 +31,8 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
     public CoinPricesWindow(String title, int lx, int ly, BinanceController bc) {
         super(title, lx, ly, 240, 720);
         windowNumber[0] = 1;
-        new Thread(new LoadingWindow<>(this)).start();
+        Main.workers.submit(new LoadingWindow<>(this));
+//        new Thread(new LoadingWindow<>(this)).start();
         this.bc = bc;
 
         CustButton addCoinsBut = new CustButton("Add Coins",0,0,240,30);
@@ -61,7 +63,7 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
             bt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    new Thread(new AddCoinWindow(me, bc)).start();
+                    Main.workers.submit(new AddCoinWindow(me, bc));
                 }
             });
         }else if(bt.getText().equals("Refresh")){

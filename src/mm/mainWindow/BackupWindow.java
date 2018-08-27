@@ -2,7 +2,7 @@ package mm.mainWindow;
 
 import mm.customObjects.CustButton;
 import mm.customObjects.SideFrame;
-import sun.security.krb5.internal.PAData;
+//import sun.security.krb5.internal.PAData;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

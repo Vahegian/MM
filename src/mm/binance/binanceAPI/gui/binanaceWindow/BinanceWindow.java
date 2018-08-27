@@ -1,5 +1,6 @@
 package mm.binance.binanceAPI.gui.binanaceWindow;
 
+import mm.Main;
 import mm.binance.binanceAPI.BinanceController;
 import mm.binance.binanceAPI.gui.binanaceWindow.subWindows.TradeHelper.TradeHelperWindow;
 import mm.database.DatabaseController;
@@ -25,12 +26,14 @@ public class BinanceWindow extends SideFrame implements Runnable {
     public BinanceWindow(String title, int lx, int ly, int sX, int sY, DatabaseController database) {
         super(title, lx, ly, sX, sY);
         windowNumber[0]=0;
-        new Thread(new LoadingWindow<>(this)).start();
+        Main.workers.submit(new LoadingWindow<>(this));
+//        new Thread(new LoadingWindow<>(this)).start();
         bc = new BinanceController(database, "DEFAULT");
         progress[0]=50;
         bc.addPairsFromDbToMap(10);
         progress[0]=90;
-        bc.updateThread.start();
+        Main.workers.submit(bc);
+//        bc.updateThread.start();
         progress[0]=100;
 
         CustButton coinPricesBut = new CustButton("Coin Prices", 10,0,140,30);
@@ -46,30 +49,28 @@ public class BinanceWindow extends SideFrame implements Runnable {
         coinPricesBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new Thread(new Runnable() {
+                Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
                         openCoinPricesWindow();
-//                        if(cpw==null || !cpw.isShowing()) {
-//                            new Thread(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc)).start();
-//                        }else cpw.requestFocus();
                     }
-                }).start();
+                });
             }
         });
 
         tradeHelpBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                new Thread(new Runnable() {
+                Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
                         openCoinPricesWindow();
                         if(thw==null || !thw.isShowing()) {
-                            new Thread(thw = new TradeHelperWindow("Trade Helper", (dim.width/2), (dim.height/2), bc)).start();
+                            Main.workers.submit(thw = new TradeHelperWindow("Trade Helper", (dim.width/2), (dim.height/2), bc));
+//                            new Thread(thw = new TradeHelperWindow("Trade Helper", (dim.width/2), (dim.height/2), bc)).start();
                         }else thw.requestFocus();
                     }
-                }).start();
+                });
             }
         });
 
@@ -86,7 +87,8 @@ public class BinanceWindow extends SideFrame implements Runnable {
 
     private void openCoinPricesWindow() {
         if(cpw==null || !cpw.isShowing()) {
-            new Thread(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc)).start();
+            Main.workers.submit(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc));
+//            new Thread(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc)).start();
         }else cpw.requestFocus();
     }
 

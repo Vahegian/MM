@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 // Uses Coinmarketcup API to get coin values.
-public class CoinCollector {
+public class CoinCollector implements Runnable {
     private String TAG = "CoinCollector";
     public static final int[] progress = {0};
     private Map<String,CoinMarket> markets;
@@ -86,8 +86,11 @@ public class CoinCollector {
                 if (!markets.containsKey(coin)) markets.put(coin, CoinMarketCap.ticker(ctMap.get(coin)).get());
 //                else System.out.println("Coin exists!");
 //                if(!(Main.progress[0] < 71)) Main.progress[0]+=2;
+            } else{
+                try {
+                    markets.replace(coin, CoinMarketCap.ticker(ctMap.get(coin)).get());
+                }catch (Exception e){}
             }
-            else markets.replace(coin, CoinMarketCap.ticker(ctMap.get(coin)).get());
             synchronized (progress) {
                 if (progress[0] < 100) {
                     progress[0] += progressSize;
@@ -103,20 +106,32 @@ public class CoinCollector {
 //        getCoinAndTickerMap();
     }
 
-    public Thread coinUpdateThread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            while(state) {
-                try {
-                    updateCoinMarkets();
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+//    public Thread coinUpdateThread = new Thread(new Runnable() {
+//        @Override
+//        public void run() {
+//            while(state) {
+//                try {
+//                    updateCoinMarkets();
+//                    Thread.sleep(1000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            System.err.println(TAG+" > update Thread stopped");
+//        }
+//    });
+
+
+    @Override
+    public void run() {
+        while(state) {
+            try {
+                updateCoinMarkets();
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            System.err.println(TAG+" > update Thread stopped");
         }
-    });
-
-
+        System.err.println(TAG+" > update Thread stopped");
+    }
 }

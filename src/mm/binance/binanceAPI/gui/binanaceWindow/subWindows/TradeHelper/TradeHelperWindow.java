@@ -1,5 +1,6 @@
 package mm.binance.binanceAPI.gui.binanaceWindow.subWindows.TradeHelper;
 
+import mm.Main;
 import mm.binance.binanceAPI.BinanceController;
 import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
@@ -50,7 +51,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         super(title, lx-370, ly-240, 740, 520);
         windowNumber[0]=2;
         this.bc=bc;
-        new Thread(new LoadingWindow<>(this)).start();
+        Main.workers.submit(new LoadingWindow<>(this));
         thl = new TradeHelperLogic(bc);
 
         listWithAddeditems = new LinkedList<HashMap<String, Object>>();
@@ -73,7 +74,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         setVisible(true);
 //        progress[0]=110;
         windowsStates[windowNumber[0]]=true;
-        new Thread(thl).start();
+        Main.workers.submit(thl);
         repaint();
         progress[0]=110;
     }

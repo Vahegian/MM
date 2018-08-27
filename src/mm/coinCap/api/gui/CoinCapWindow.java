@@ -5,6 +5,7 @@ custom class CustTextPane.
 
 package mm.coinCap.api.gui;
 
+import mm.Main;
 import mm.coinCap.api.CoinCollector;
 import com.lucadev.coinmarketcap.model.CoinMarket;
 import mm.database.DatabaseController;
@@ -12,7 +13,6 @@ import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
 import mm.customObjects.CustTextPane;
 import mm.customObjects.SideFrame;
-import mm.mainWindow.OtherButtonsPanel;
 import mm.startGui.LoadingWindow;
 
 import javax.swing.*;
@@ -52,8 +52,8 @@ public class CoinCapWindow extends SideFrame implements Runnable {
         add(refreshBut);
 
 
-        new Thread(new LoadingWindow<>(me)).start();
-        new Thread(new Runnable() {
+        Main.workers.submit(new LoadingWindow<>(me));
+        Main.workers.submit(new Runnable() {
             @Override
             public void run() {
                 while (progress[0]<100) {
@@ -69,7 +69,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
                 progress[0]=100;
                 System.err.println(TAG+"> progress update Thread stopped");
             }
-        }).start();
+        });
 
         this.cc = new CoinCollector(database);
 
@@ -89,7 +89,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
             bt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    new Thread(new AddCoinWindow(me, cc)).start();
+                    Main.workers.submit(new AddCoinWindow(me, cc));
                 }
             });
         }else if(bt.getText().equals("Refresh")){
@@ -212,7 +212,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
      */
     @Override
     public void run() {
-        cc.coinUpdateThread.start();
+        Main.workers.submit(cc);
         while (windowsStates[windowNumber[0]]) {
             try {
 
