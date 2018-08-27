@@ -6,6 +6,7 @@ import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
 import mm.binance.binanceAPI.gui.binanaceWindow.BinanceWindow;
 import mm.coinCap.api.gui.CoinCapWindow;
+import mm.mainWindow.backuppkg.BackupWindow;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -53,12 +54,14 @@ public class OtherButtonsPanel extends JPanel {
                 Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
+                        Main.plusThread();
                         if(backupWindow==null || !backupWindow.isShowing()) {
                             if(coinCap!=null) coinCap.dispose();
                             if(binance!=null) binance.dispose();
                             backupWindow = new BackupWindow("Back Up", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 100), 450, 70);
                         }else if(whatToDoIfOpen.equals("FOCUS")){ backupWindow.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ backupWindow.dispose();}
+                        Main.minusThread();
                     }
                 });
             }
@@ -94,11 +97,13 @@ public class OtherButtonsPanel extends JPanel {
                 Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
+                        Main.plusThread();
                         if(binance == null || !binance.isShowing()) {
                             binance = new BinanceWindow("Binanace", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 100), 450, 70, db);
                             Main.workers.submit(binance);
                         }else if(whatToDoIfOpen.equals("FOCUS")) { binance.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ binance.dispose();}
+                        Main.minusThread();
                     }
                 });
             }
