@@ -1,0 +1,1 @@
+Move this directory to location "usr/share" as a root
