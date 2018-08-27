@@ -4,6 +4,7 @@ import com.binance.api.client.*;
 import com.binance.api.client.domain.account.Account;
 import com.binance.api.client.domain.account.AssetBalance;
 import com.binance.api.client.domain.market.OrderBook;
+import mm.Main;
 import mm.database.DatabaseController;
 
 import javax.management.openmbean.InvalidKeyException;
@@ -199,6 +200,7 @@ public class BinanceController implements Runnable{
 
     @Override
     public void run() {
+        Main.plusThread();
         while (threadState) {
             try {
                 synchronized (orderBookMap) {
@@ -211,5 +213,6 @@ public class BinanceController implements Runnable{
             }
         }
         System.err.println(TAG+" > update Thread stopped");
+        Main.minusThread();
     }
 }

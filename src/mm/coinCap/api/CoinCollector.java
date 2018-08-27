@@ -8,6 +8,7 @@ package mm.coinCap.api;
 
 import com.lucadev.coinmarketcap.CoinMarketCap;
 import com.lucadev.coinmarketcap.model.CoinMarket;
+import mm.Main;
 import mm.database.DatabaseController;
 
 import java.util.HashMap;
@@ -124,6 +125,7 @@ public class CoinCollector implements Runnable {
 
     @Override
     public void run() {
+        Main.plusThread();
         while(state) {
             try {
                 updateCoinMarkets();
@@ -133,5 +135,6 @@ public class CoinCollector implements Runnable {
             }
         }
         System.err.println(TAG+" > update Thread stopped");
+        Main.minusThread();
     }
 }

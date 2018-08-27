@@ -48,7 +48,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
 
     public TradeHelperWindow(String title, int lx, int ly,BinanceController bc) {
-        super(title, lx-370, ly-240, 740, 520);
+        super(title, lx-370, ly-240, 760, 520);
         windowNumber[0]=2;
         this.bc=bc;
         Main.workers.submit(new LoadingWindow<>(this));
@@ -92,7 +92,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     private void makeBottomPanel() {
         removeAll = new  CustButton("Remove All",0,0,sx,40);
         removeAll.setBorder(BorderFactory.createEmptyBorder());
-        removeAll.setBounds(560,440,80,40);
+        removeAll.setBounds(560,460,80,40);
         removeAll.setForeground(Colors.red);
 //        add(removeAll);
         removeAll.setVisible(true);
@@ -129,7 +129,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         bottomPanel.add(totalAmountBoughtHintArea);
         bottomPanel.add(totalAmountBoughtPane);
         bottomPanel.add(removeAll);
-        bottomPanel.setBounds(0,440,sx,40);
+        bottomPanel.setBounds(0,460,sx,40);
         bottomPanel.setBackground(Colors.white);
 
         add(bottomPanel);
@@ -310,7 +310,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         sp = new JScrollPane(middlePanel);
         sp.setBackground(Colors.white);
         sp.setBorder(BorderFactory.createEmptyBorder());
-        sp.setBounds(0,80,sx,360);
+        sp.setBounds(0,80,sx,380);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 //        sp.setBackground(Colors.lightBlue);
@@ -505,6 +505,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
     @Override
     public void run() {
+        Main.plusThread();
         try {
             Thread.sleep(3000);
             thl.updateTotalAmountBought(listWithAddeditems, totalAmountBoughtPane);
@@ -524,6 +525,6 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         System.err.println(TAG+" > Thread Stopped");
         threadStateToDefault(this);
         thl.stopTheThread();
-
+        Main.minusThread();
     }
 }

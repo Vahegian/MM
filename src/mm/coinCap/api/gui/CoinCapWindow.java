@@ -56,6 +56,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
         Main.workers.submit(new Runnable() {
             @Override
             public void run() {
+                Main.plusThread();
                 while (progress[0]<100) {
                     try {
                         synchronized (progress) {
@@ -68,6 +69,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
                 }
                 progress[0]=100;
                 System.err.println(TAG+"> progress update Thread stopped");
+                Main.minusThread();
             }
         });
 
@@ -212,6 +214,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
      */
     @Override
     public void run() {
+        Main.plusThread();
         Main.workers.submit(cc);
         while (windowsStates[windowNumber[0]]) {
             try {
@@ -233,5 +236,6 @@ public class CoinCapWindow extends SideFrame implements Runnable {
         threadStateToDefault(this);
         cc.state=false;
 //        this.dispose();
+        Main.minusThread();
     }
 }

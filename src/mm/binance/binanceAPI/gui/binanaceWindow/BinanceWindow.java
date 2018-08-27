@@ -52,7 +52,9 @@ public class BinanceWindow extends SideFrame implements Runnable {
                 Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
+                        Main.plusThread();
                         openCoinPricesWindow();
+                        Main.minusThread();
                     }
                 });
             }
@@ -64,11 +66,13 @@ public class BinanceWindow extends SideFrame implements Runnable {
                 Main.workers.submit(new Runnable() {
                     @Override
                     public void run() {
+                        Main.plusThread();
                         openCoinPricesWindow();
                         if(thw==null || !thw.isShowing()) {
                             Main.workers.submit(thw = new TradeHelperWindow("Trade Helper", (dim.width/2), (dim.height/2), bc));
 //                            new Thread(thw = new TradeHelperWindow("Trade Helper", (dim.width/2), (dim.height/2), bc)).start();
                         }else thw.requestFocus();
+                        Main.minusThread();
                     }
                 });
             }
@@ -94,6 +98,7 @@ public class BinanceWindow extends SideFrame implements Runnable {
 
     @Override
     public void run() {
+        Main.plusThread();
         while (windowsStates[windowNumber[0]]) {
             try {
 //                for (String s : bc.getLastPrices().keySet()) System.out.println(bc.getLastPrices().get(s));
@@ -108,5 +113,6 @@ public class BinanceWindow extends SideFrame implements Runnable {
         if(cpw!=null) cpw.dispose();
         if(thw!=null) thw.dispose();
         bc.threadState=false;
+        Main.minusThread();
     }
 }

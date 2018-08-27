@@ -1,6 +1,8 @@
 package mm.customObjects; /**
  * Created by Vahe Grigoryan on 26/10/2017.
  */
+import mm.Main;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +53,7 @@ public class Colors implements Runnable {
      */
     @Override
     public void run() {
+        Main.plusThread();
         for(int i = 0; i<250;i++){
             shadesOfRed.add(new Color(i,0,0));
         }
@@ -60,6 +63,6 @@ public class Colors implements Runnable {
         for(int i = 0; i<250;i++){
             shadesOfBlue.add(new Color(0,0,i));
         }
-
+        Main.minusThread();
     }
 }

@@ -42,8 +42,6 @@ public class LoadingWindow <T extends SideFrame> extends InfoFrame implements Ru
 //        synchronized (t.progress){
 
 //        }
-
-
     }
 
     private void paintMessage(Graphics2D g){

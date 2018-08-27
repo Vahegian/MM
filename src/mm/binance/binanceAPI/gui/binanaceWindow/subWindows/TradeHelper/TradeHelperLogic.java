@@ -1,5 +1,6 @@
 package mm.binance.binanceAPI.gui.binanaceWindow.subWindows.TradeHelper;
 
+import mm.Main;
 import mm.binance.binanceAPI.BinanceController;
 import mm.customObjects.Colors;
 import mm.customObjects.CustTextPane;
@@ -173,6 +174,7 @@ public class TradeHelperLogic implements Runnable {
 
     @Override
     public void run() {
+        Main.plusThread();
         while (!stopTHLThread[0]) {
             try {
                 getLastPrices();
@@ -182,5 +184,6 @@ public class TradeHelperLogic implements Runnable {
             }
         }
         System.err.println(TAG+" > Thread Stopped");
+        Main.minusThread();
     }
 }

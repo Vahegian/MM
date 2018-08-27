@@ -5,6 +5,7 @@ This class creates a window to get coin and ticker from user and add new coin in
 "coinCapMarket"
  */
 
+import mm.Main;
 import mm.binance.binanceAPI.BinanceController;
 import mm.customObjects.Colors;
 
@@ -55,6 +56,7 @@ class AddCoinWindow extends JFrame implements Runnable {
 
     @Override
     public void run() {
+        Main.plusThread();
         JPanel inputPanle = new JPanel();
 
         JTextField coinText = new JTextField();
@@ -121,7 +123,7 @@ class AddCoinWindow extends JFrame implements Runnable {
                 addNewCoin(coinText.getText(), pairText.getText());
             }
         });
-
+        Main.minusThread();
     }
 }
 

@@ -5,6 +5,7 @@ This class creates a window to get coin and ticker from user and add new coin in
 
 package mm.coinCap.api.gui;
 
+import mm.Main;
 import mm.coinCap.api.CoinCollector;
 import com.lucadev.coinmarketcap.model.CoinMarket;
 import mm.customObjects.Colors;
@@ -55,6 +56,7 @@ class AddCoinWindow extends JFrame implements Runnable {
 
     @Override
     public void run() {
+        Main.plusThread();
         JPanel inputPanle = new JPanel();
 
         JTextField coinText = new JTextField();
@@ -119,6 +121,6 @@ class AddCoinWindow extends JFrame implements Runnable {
                 addNewCoin(coinText.getText(), tickerText.getText());
             }
         });
-
+        Main.minusThread();
     }
 }

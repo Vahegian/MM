@@ -1,6 +1,7 @@
 package mm;
 
 import mm.mainWindow.Frame;
+import mm.startGui.RunTimeInfoWindow;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -13,6 +14,7 @@ public class Main {
         workers = Executors.newFixedThreadPool(10);
         startCountingThreads();
         new Frame();
+
     }
 
     public static void plusThread(){
@@ -32,9 +34,10 @@ public class Main {
             @Override
             public void run() {
                 threadCount[0]+=1;
+                RunTimeInfoWindow rtif = new RunTimeInfoWindow();
                 while (true){
                     synchronized (threadCount) {
-                        System.err.println("Threads used from the pool: " + threadCount[0]);
+                        rtif.setInfo("Threads used from the pool: ", threadCount[0]+"");
                     }
                     try {
                         Thread.sleep(1000);

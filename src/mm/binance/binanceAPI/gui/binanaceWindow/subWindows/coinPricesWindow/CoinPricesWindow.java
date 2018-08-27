@@ -194,6 +194,7 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
      */
     @Override
     public void run() {
+        Main.plusThread();
 //        boolean run = true;
         while (windowsStates[windowNumber[0]]) {
             if(bc.isloaded) {
@@ -210,5 +211,6 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
         System.err.println(TAG+" > Thread Stopped");
         threadStateToDefault(this);
 
+        Main.minusThread();
     }
 }
