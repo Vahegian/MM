@@ -1,4 +1,4 @@
-package mm.mainWindow;
+package mm.mainWindow.backuppkg;
 
 import mm.customObjects.CustButton;
 import mm.customObjects.SideFrame;
@@ -60,9 +60,13 @@ public class BackupWindow extends SideFrame {
                 String dbname=dbnamef.getText();
                 if(checkUserData(user,passw,dbname)){
                     try {
-                        p=r.exec("mysqldump -u "+user+" -p"+passw+" "+dbname+" > mm.sql");
+                        ProcessBuilder pb = new ProcessBuilder();
+                        pb.command("/usr/share/MM/mmdump.sh", user,passw,dbname);
+                        pb.start();
+//                        p=r.exec("mysqldump -u "+user+" -p"+passw+" "+dbname+" > /home/lavaguiny/Documents/mm.sql");
+//                        p=r.exec("/home/lavaguiny/Documents/mmdump.sh");
                         Thread.sleep(1000);
-                        p.destroy();
+//                        p.destroy();
                     }catch (Exception e){System.err.println(e+"");}
                 }
             }
