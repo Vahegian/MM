@@ -4,17 +4,14 @@ Shows the progress of how much have the program loaded
 
 package mm.startGui;
 
-import mm.coinCap.api.CoinCollector;
 import mm.customObjects.SideFrame;
-import mm.database.DatabaseController;
 import mm.customObjects.Colors;
-import mm.mainWindow.Frame;
 import mm.Main;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class LoadingWindow <T extends SideFrame> extends SideFrame implements Runnable {
+public class LoadingWindow <T extends SideFrame> extends InfoFrame implements Runnable {
 //    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 //    private Main main;
     private int [] window = new int[2];
@@ -25,22 +22,10 @@ public class LoadingWindow <T extends SideFrame> extends SideFrame implements Ru
     public LoadingWindow(T t){
         super("Please Wait!", Toolkit.getDefaultToolkit().getScreenSize().width/2-180,Toolkit.getDefaultToolkit().getScreenSize().height/2-60,360,60);
         this.t = t;
-        getRootPane().setWindowDecorationStyle(JRootPane.NONE);
-        setUndecorated(true);
-        setBackground(Colors.black);
-        setOpacity(0.6f);
 
-
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        setAlwaysOnTop(true);
-//        setOpacity(0.5f);
-//        setUndecorated(true);
-//        setUndecorated(true);
         panel = new JPanel();
         add(panel);
 
-        setVisible(true);
-        repaint();
         System.err.println("loading window loaded");
     }
 
