@@ -63,7 +63,7 @@ public class LoadingWindow <T extends SideFrame> extends SideFrame implements Ru
 
     private void paintMessage(Graphics2D g){
         g.setColor(Colors.white);
-        g.drawString("Please Wait!", 140, 35);
+        g.drawString("Please Wait! "+t.progress[0]+"%", 140, 35);
     }
 
     private void paintProgress(Graphics2D g){
@@ -75,6 +75,7 @@ public class LoadingWindow <T extends SideFrame> extends SideFrame implements Ru
 
     @Override
     public void run() {
+        Main.plusThread();
         while(t.progress[0] <100) {
             repaint();
             try {
@@ -89,5 +90,6 @@ public class LoadingWindow <T extends SideFrame> extends SideFrame implements Ru
         repaint();
 //        t.progress[0]=0;
         dispose();
+        Main.minusThread();
     }
 }
