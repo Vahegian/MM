@@ -50,6 +50,8 @@ public class LoadingWindow <T extends SideFrame> extends InfoFrame implements Ru
     }
 
     private void paintProgress(Graphics2D g){
+        g.setColor(Colors.black);
+        g.fillRect(0,0,360,60);
         g.setColor(Colors.blue);
         synchronized (progress) {
             g.fillRect(0, 0, (int) ((3.6 * t.progress[0]) + 0.5), 60);

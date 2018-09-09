@@ -36,7 +36,7 @@ public class OtherButtonsPanel extends JPanel {
         coinCapBut = new CustButton("CoinCap",10,0,100,30);
         binanceBut = new CustButton("Binance", 120,0,100,30);
         hitBTCbut = new CustButton("HITBTC", 230,0,100,30);
-        backupBut = new CustButton("BACK UP", 340,0,100,30);
+        backupBut = new CustButton("BACKUP", 340,0,100,30);
 //        Main.progress[0] = 75;
 
         addActionToCoinCapBut(coinCapBut, db, "FOCUS");
@@ -58,7 +58,7 @@ public class OtherButtonsPanel extends JPanel {
                         if(backupWindow==null || !backupWindow.isShowing()) {
                             if(coinCap!=null) coinCap.dispose();
                             if(binance!=null) binance.dispose();
-                            backupWindow = new BackupWindow("Back Up", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 100), 450, 70);
+                            backupWindow = new BackupWindow("BACKUP", screenDim[0] - 225, screenDim[1] - 370);
                         }else if(whatToDoIfOpen.equals("FOCUS")){ backupWindow.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ backupWindow.dispose();}
                         Main.minusThread();
@@ -78,7 +78,7 @@ public class OtherButtonsPanel extends JPanel {
                     @Override
                     public void run() {
                         if(coinCap==null || !coinCap.isShowing()) {
-                            coinCap = new CoinCapWindow("CoinMarketCap", screenDim[0] + (screenDim[0] - 240), 0, db);
+                            coinCap = new CoinCapWindow("CoinMarketCap", screenDim[0] + 380, screenDim[1]-420, db);
                             Main.workers.submit(coinCap);
 //                            new Thread(coinCap).start();
                         }else if(whatToDoIfOpen.equals("FOCUS")){ coinCap.requestFocus();
@@ -99,7 +99,7 @@ public class OtherButtonsPanel extends JPanel {
                     public void run() {
                         Main.plusThread();
                         if(binance == null || !binance.isShowing()) {
-                            binance = new BinanceWindow("Binanace", screenDim[0] - 225, screenDim[1] - (screenDim[1] - 100), 450, 70, db);
+                            binance = new BinanceWindow("Binanace", screenDim[0] - 225, screenDim[1] - 370,  db);
                             Main.workers.submit(binance);
                         }else if(whatToDoIfOpen.equals("FOCUS")) { binance.requestFocus();
                         }else if(whatToDoIfOpen.equals("KILL")){ binance.dispose();}

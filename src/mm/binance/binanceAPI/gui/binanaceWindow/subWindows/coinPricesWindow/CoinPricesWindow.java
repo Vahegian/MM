@@ -29,7 +29,7 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
 //    private boolean isloaded = false;
 
     public CoinPricesWindow(String title, int lx, int ly, BinanceController bc) {
-        super(title, lx, ly, 240, 720);
+        super(title, lx-620, ly-420, 240, 720);
         windowNumber[0] = 1;
         Main.workers.submit(new LoadingWindow<>(this));
 //        new Thread(new LoadingWindow<>(this)).start();

@@ -23,8 +23,8 @@ public class BinanceWindow extends SideFrame implements Runnable {
 
 //    public boolean[] binanceWindowsStates = {false,false,false};
 
-    public BinanceWindow(String title, int lx, int ly, int sX, int sY, DatabaseController database) {
-        super(title, lx, ly, sX, sY);
+    public BinanceWindow(String title, int lx, int ly, DatabaseController database) {
+        super(title, lx, ly, 450, 70);
         windowNumber[0]=0;
         Main.workers.submit(new LoadingWindow<>(this));
 //        new Thread(new LoadingWindow<>(this)).start();
@@ -91,7 +91,7 @@ public class BinanceWindow extends SideFrame implements Runnable {
 
     private void openCoinPricesWindow() {
         if(cpw==null || !cpw.isShowing()) {
-            Main.workers.submit(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc));
+            Main.workers.submit(cpw = new CoinPricesWindow("Binance Coin Prices", (dim.width/2), (dim.height/2), bc));
 //            new Thread(cpw = new CoinPricesWindow("Binance Coin Prices", 0, 0, bc)).start();
         }else cpw.requestFocus();
     }

@@ -1,19 +1,22 @@
 package mm;
 
-import mm.mainWindow.Frame;
+import mm.loginpkg.LoginWindow;
 import mm.startGui.RunTimeInfoWindow;
 
+import java.awt.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class Main {
     public static ExecutorService workers;
     public static final int[] threadCount = {0};
+    public static final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     public static void main(String[] args){
 //      code is optimised for CPU with 2 Cores and 2.7GHz per core
         workers = Executors.newFixedThreadPool(10);
         startCountingThreads();
-        new Frame();
+        new LoginWindow("LogIn", dim.width/2, dim.height/2);
+//        new MainFrame();
 
     }
 

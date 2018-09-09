@@ -1,5 +1,6 @@
 package mm.mainWindow.backuppkg;
 
+import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
 import mm.customObjects.SideFrame;
 //import sun.security.krb5.internal.PAData;
@@ -12,20 +13,24 @@ public class BackupWindow extends SideFrame {
     private String pass = "";
     private Runtime r;
     private Process p;
-    public BackupWindow(String title, int lx, int ly, int sX, int sY) {
-        super(title, lx, ly, sX, sY);
+    public BackupWindow(String title, int lx, int ly) {
+        super(title, lx, ly, 450, 70);
 
         JPanel mainPanel = new JPanel();
         mainPanel.setBounds(0,0,sx,sy);
+        mainPanel.setBackground(Colors.white);
         JTextArea userhint = new JTextArea("User");
+        userhint.setBackground(Colors.white);
         userhint.setEditable(false);
         JTextArea passhint = new JTextArea("Password");
+        passhint.setBackground(Colors.white);
         passhint.setEditable(false);
         JTextArea namehint = new JTextArea("db Name");
+        namehint.setBackground(Colors.white);
 
         JTextField dbUser = new JTextField();
         dbUser.setColumns(5);
-        JTextField dbPassword = new JTextField();
+        JPasswordField dbPassword = new JPasswordField();
         dbPassword.setColumns(5);
         dbPassword.addActionListener(new ActionListener() {
             @Override

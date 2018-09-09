@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.List;
 
 public class TradeHelperWindow extends SideFrame implements Runnable{
-    private String TAG = "Binance/TradeHelper";
+    private String TAG = "Binance/TradeHelperWindow";
     private BinanceController bc;
     private Thread guiThread;
     private JComboBox<String> coinTypeCombo;
@@ -46,9 +46,8 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     static final String HOWMANYPANEKEY = "howmanymore";
     static final String HOWMUCHISTOTALPANEKEY = "rowtotal";
 
-
     public TradeHelperWindow(String title, int lx, int ly,BinanceController bc) {
-        super(title, lx-370, ly-240, 760, 520);
+        super(title, lx-380, ly-300, 760, 600);
         windowNumber[0]=2;
         this.bc=bc;
         Main.workers.submit(new LoadingWindow<>(this));
@@ -61,7 +60,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         try {
             makeGui();
         }catch (Exception e){
-            System.err.println(TAG+"> "+e);
+            System.err.println(TAG+"/constructor > "+e);
             progress[0]=110;
         }
         try {
@@ -83,20 +82,40 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         setBackground(Colors.white);
         makeTopPanel();
         makeMiddlePanel();
-        putMiddlePanlelInScrollView();
+        System.err.println("halfway");
         addItemsFromDBtoMiddlePanel();
-        makeBottomPanel();
+        addHintsToMiddlePanelHintPanel();
+        putMiddlePanlelInScrollView();
+        makeBottomPanelOne();
+        makeBottomPanelTwo();
+        makeLastBottomPanel();
         repaint();
     }
 
-    private void makeBottomPanel() {
+    private void makeBottomPanelTwo() {
+        JPanel b2Panel = new JPanel();
+        b2Panel.setBackground(Colors.white);
+        b2Panel.setBounds(0,sy-100,sx,40);
+
+        add(b2Panel);
+    }
+
+    private void makeLastBottomPanel() {
         removeAll = new  CustButton("Remove All",0,0,sx,40);
         removeAll.setBorder(BorderFactory.createEmptyBorder());
-        removeAll.setBounds(560,460,80,40);
+        removeAll.setBounds(0,0,sx,40);
         removeAll.setForeground(Colors.red);
-//        add(removeAll);
         removeAll.setVisible(true);
 
+        JPanel blPanel = new JPanel();
+        blPanel.setBackground(Colors.white);
+        blPanel.setBounds(0,sy-60,sx,40);
+        blPanel.add(removeAll);
+
+        add(blPanel);
+    }
+
+    private void makeBottomPanelOne() {
         JTextArea totalProfitHintArea = new JTextArea();
         totalProfitHintArea.setText("Total profit");
         totalProfitHintArea.setBorder(BorderFactory.createEmptyBorder());
@@ -128,8 +147,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         bottomPanel.add(totalAmountNowPane);
         bottomPanel.add(totalAmountBoughtHintArea);
         bottomPanel.add(totalAmountBoughtPane);
-        bottomPanel.add(removeAll);
-        bottomPanel.setBounds(0,460,sx,40);
+        bottomPanel.setBounds(0,sy-140,sx,40);
         bottomPanel.setBackground(Colors.white);
 
         add(bottomPanel);
@@ -181,7 +199,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
                 try {
                    al = ((JButton)listWithAddeditems.get(0).get(REMOVEBUTKEY)).getActionListeners()[0];
                 }catch (Exception e){
-                    System.err.println(TAG+" "+e);
+                    System.err.println(TAG+"/addListeners../ "+e);
                 }
 
 
@@ -228,18 +246,21 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         middlePanelHintsPanel.setBackground(Colors.white);
 //        middlePanelHintsPanel.setLayout(new BoxLayout(middlePanelHintsPanel, BoxLayout.X_AXIS));
         middlePanelHintsPanel.setVisible(true);
+//        middlePanelHintsPanel.setLayout(null);
         middlePanelHintsPanel.setBounds(0,40,sx,40);
-        addHintsToMiddlePanelHintPanel();
-        add(middlePanelHintsPanel);
 
 
         middlePanel = new JPanel();
         middlePanel.setVisible(true);
-        middlePanel.setBackground(Colors.lightBlue);
+//        middlePanel.setBackground(Colors.lightBlue);
         middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
     }
 
     private void addHintsToMiddlePanelHintPanel() {
+//        System.err.println(((JTextField)listWithAddeditems.get(0).get(PAIRKEY)).getColumns());
+//        System.err.println(((JTextField)listWithAddeditems.get(0).get(PRICEKEY)).getColumns());
+//        System.err.println(((CustTextPane)listWithAddeditems.get(0).get(PROFITKEY)).getWidth());
+
         int colNum = 10;
         JTextField pairHint = new JTextField();
         pairHint.setEditable(false);
@@ -270,7 +291,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         profitHint.setBackground(Colors.white);
         profitHint.setForeground(Colors.blue);
         profitHint.setText("Profit - Loss");
-        profitHint.setColumns(colNum);
+        profitHint.setColumns(colNum+2);
         profitHint.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField howManyHint = new JTextField();
@@ -278,7 +299,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         howManyHint.setBackground(Colors.white);
         howManyHint.setForeground(Colors.blue);
         howManyHint.setText("Can Buy");
-        howManyHint.setColumns(colNum);
+        howManyHint.setColumns(colNum+2);
         howManyHint.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField totalHint = new JTextField();
@@ -286,24 +307,31 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         totalHint.setBackground(Colors.white);
         totalHint.setForeground(Colors.blue);
         totalHint.setText("Total $");
-        totalHint.setColumns(colNum);
+        totalHint.setColumns(colNum+2);
         totalHint.setBorder(BorderFactory.createEmptyBorder());
 
         JTextField removeHint = new JTextField();
         removeHint.setEditable(false);
         removeHint.setBackground(Colors.white);
         removeHint.setForeground(Colors.blue);
-        removeHint.setText("          ");
-        removeHint.setColumns(1);
+        removeHint.setText("      ");
+        removeHint.setColumns(colNum);
         removeHint.setBorder(BorderFactory.createEmptyBorder());
 
+//        pairHint.setBounds(0,0,sx/7,40);
         middlePanelHintsPanel.add(pairHint);
+//        amountHint.setBounds((sx/7),0,sx/7,40);
         middlePanelHintsPanel.add(amountHint);
+//        priceOfOneHint.setBounds((sx/7)*2,0,sx/7,40);
         middlePanelHintsPanel.add(priceOfOneHint);
+//        profitHint.setBounds((sx/7)*3,0,sx/7,40);
         middlePanelHintsPanel.add(profitHint);
+//        howManyHint.setBounds((sx/7)*4,0,sx/7,40);
         middlePanelHintsPanel.add(howManyHint);
+//        totalHint.setBounds((sx/7)*5,0,sx/7,40);
         middlePanelHintsPanel.add(totalHint);
-        middlePanelHintsPanel.add(removeHint);
+//        middlePanelHintsPanel.add(removeHint);
+        add(middlePanelHintsPanel);
     }
 
     private void putMiddlePanlelInScrollView(){
@@ -328,29 +356,52 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
     private void addItemsToMiddlePanel(){
         if(listWithAddeditems !=null){
+            int height = 40;
+            int cols = 7;
 //            System.out.println(listWithAddeditems.size());
             for (int i =0; i<listWithAddeditems.size(); i++){
                 if(i>numperOfItems) {
                     JPanel items = new JPanel();
-                    items.setBounds(0, 0, 640, 40);
+                    items.setBounds(0, 0, sx, height);
+//                    items.setLayout(null);
                     items.setBackground(Colors.white);
 //                    FlowLayout fl = new FlowLayout();
 //                    fl.setHgap(5);
 //                    fl.setAlignment(FlowLayout.LEFT);
 //                    items.setLayout(fl);
 //                    ((JTextField)listWithAddeditems.get(i).get("pairfield")).setColumns(10);
-                    items.add((JTextField)listWithAddeditems.get(i).get(PAIRKEY));
+                    JTextField p1 = (JTextField)listWithAddeditems.get(i).get(PAIRKEY);
+//                    p1.setBounds(0,0,sx/7,height);
+//                    p1.setColumns(cols);
+                    items.add(p1);
 //                System.out.println(l.get(0).getText());
 //                    ((JTextField)listWithAddeditems.get(i).get("amountfield")).setColumns(10);
-                    items.add((JTextField)listWithAddeditems.get(i).get(AMOUNTKEY));
+                    JTextField p2 = (JTextField)listWithAddeditems.get(i).get(AMOUNTKEY);
+//                    p2.setBounds((sx/7),0,sx/7,height);
+//                    p2.setColumns(cols);
+                    items.add(p2);
 //                    ((JTextField)listWithAddeditems.get(i).get("curPricefield")).setColumns(10);
-                    items.add((JTextField)listWithAddeditems.get(i).get(PRICEKEY));
+                    JTextField p3 = (JTextField)listWithAddeditems.get(i).get(PRICEKEY);
+//                    p3.setBounds((sx/7)*2,0,sx/7,height);
+//                    p3.setColumns(cols);
+                    items.add(p3);
+
 //                    ((CustTextPane)listWithAddeditems.get(i).get("profitpane")).setMaximumSize(panedim);
-                    items.add((CustTextPane)listWithAddeditems.get(i).get(PROFITKEY));
+                    CustTextPane p4 = (CustTextPane)listWithAddeditems.get(i).get(PROFITKEY);
+//                    p4.setBounds((sx/7)*3,0,sx/7,height);
+                    items.add(p4);
 //                    ((JButton)listWithAddeditems.get(i).get("removebutton"))
-                    items.add((CustTextPane)listWithAddeditems.get(i).get(HOWMANYPANEKEY));
-                    items.add((CustTextPane)listWithAddeditems.get(i).get(HOWMUCHISTOTALPANEKEY));
-                    items.add((JButton)listWithAddeditems.get(i).get(REMOVEBUTKEY), BorderLayout.LINE_END);
+                    CustTextPane p5 = (CustTextPane)listWithAddeditems.get(i).get(HOWMANYPANEKEY);
+//                    p5.setBounds((sx/7)*4,0,sx/7,height);
+                    items.add(p5);
+
+                    CustTextPane p6 = (CustTextPane)listWithAddeditems.get(i).get(HOWMUCHISTOTALPANEKEY);
+//                    p6.setBounds((sx/7)*5,0,sx/7,height);
+                    items.add(p6);
+
+                    JButton p7 = (JButton)listWithAddeditems.get(i).get(REMOVEBUTKEY);
+//                    p7.setBounds((sx/7)*6,0,sx/7,height);
+                    items.add(p7);
 //                    items.setLayout(null);
                     middlePanel.add(items);
                     numperOfItems++;
