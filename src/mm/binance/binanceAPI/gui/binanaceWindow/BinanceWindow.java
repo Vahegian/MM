@@ -5,15 +5,16 @@ import mm.binance.binanceAPI.BinanceController;
 import mm.binance.binanceAPI.gui.binanaceWindow.subWindows.TradeHelper.TradeHelperWindow;
 import mm.database.DatabaseController;
 import mm.customObjects.CustButton;
-import mm.customObjects.SideFrame;
+import mm.customObjects.CustFrame;
 import mm.binance.binanceAPI.gui.binanaceWindow.subWindows.coinPricesWindow.CoinPricesWindow;
 import mm.startGui.LoadingWindow;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BinanceWindow extends SideFrame implements Runnable {
+public class BinanceWindow extends CustFrame implements Runnable {
     private String TAG = "BinanceWindow";
     private BinanceController bc;
     private BinanceWindow me =this;
@@ -35,15 +36,17 @@ public class BinanceWindow extends SideFrame implements Runnable {
         Main.workers.submit(bc);
 //        bc.updateThread.start();
         progress[0]=100;
-
+        JPanel butPanel = new JPanel();
+        butPanel.setLayout(null);
         CustButton coinPricesBut = new CustButton("Coin Prices", 10,0,140,30);
         CustButton tradeHelpBut = new CustButton("Trade Helper", 155,0,140,30);
         CustButton But3 = new CustButton("Auto Trade", 300,0,140,30);
 
-        add(coinPricesBut);
-        add(tradeHelpBut);
-        add(But3);
-
+        butPanel.add(coinPricesBut);
+        butPanel.add(tradeHelpBut);
+        butPanel.add(But3);
+        butPanel.setBounds(0,yGap, sx, 40);
+        add(butPanel);
         setVisible(true);
 
         coinPricesBut.addActionListener(new ActionListener() {

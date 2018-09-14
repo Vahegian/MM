@@ -6,11 +6,11 @@ import mm.mainWindow.MainFrame;
 import mm.startGui.InfoFrame;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginWindow extends InfoFrame {
-    private JPanel toolPanel;
     private CustButton exitBut;
     private JPanel mainPanel;
     private CustButton enterBut;
@@ -18,11 +18,14 @@ public class LoginWindow extends InfoFrame {
     private JTextField dbUser;
     private JPasswordField dbPassword;
     private LoginWindow me = this;
+    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+
 
     public LoginWindow(String title, int lx, int ly) {
         super(title, lx-120, ly-100, 240, 200);
         setOpacity(0.9f);
-
+        setAlwaysOnTop(false);
+        killAllWindows = true;
         makeTopButtons();
         makeMainPanel();
         addListenersTobjects();
@@ -33,13 +36,6 @@ public class LoginWindow extends InfoFrame {
     }
 
     private void addListenersTobjects() {
-        exitBut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(1);
-            }
-        });
-
         enterBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -48,10 +44,11 @@ public class LoginWindow extends InfoFrame {
                 String dbname=dbName.getText();
                 if(checkUserData(user,passw,dbname)){
                     try {
-                        MainFrame frame = new MainFrame();
-                        frame.getDBnUser(dbname,user,passw);
-                        frame.makeTheFrame();
-                        me.dispose();
+                        MainFrame frame = new MainFrame(dim.width/2, dim.height/2, dim);
+                        if (frame.getDBnUser(dbname,user,passw)) {
+                            frame.makeTheFrame();
+                            me.dispose();
+                        }else showDialog();
                     }catch (Exception e1){System.err.println(e1+"");}
                 }
             }
@@ -70,13 +67,17 @@ public class LoginWindow extends InfoFrame {
         for(String d:data){
 //            System.err.println(d);
             if(d.length()<1){
-                JOptionPane info = new JOptionPane();
-                info.setMessage("Incomplete data");
-                info.createDialog("INFO").show();
+                showDialog();
                 return false;
             }
         }
         return true;
+    }
+
+    private void showDialog() {
+        JOptionPane info = new JOptionPane();
+        info.setMessage("Incomplete data");
+        info.createDialog("INFO").show();
     }
 
     private void makeMainPanel() {
@@ -112,14 +113,14 @@ public class LoginWindow extends InfoFrame {
     }
 
     private void makeTopButtons() {
-        toolPanel = new JPanel();
-        toolPanel.setBackground(Colors.white);
-        toolPanel.setBounds(0,0,sx,50);
-        exitBut = new CustButton("X",0,0,100,50);
-        exitBut.setForeground(Colors.red);
-        enterBut = new CustButton("$", 100,0,140,50);
+//        toolPanel = new JPanel();
+//        toolPanel.setBackground(Colors.white);
+//        toolPanel.setBounds(0,0,sx,50);
+//        exitBut = new CustButton("X",0,0,100,50);
+//        exitBut.setForeground(Colors.red);
+        enterBut = new CustButton("$", 100,0,140,yGap);
         enterBut.setForeground(Colors.green);
-        toolPanel.add(exitBut);
+        enterBut.setBorder(BorderFactory.createEmptyBorder());
         toolPanel.add(enterBut);
     }
 }

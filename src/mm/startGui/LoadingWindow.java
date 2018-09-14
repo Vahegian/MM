@@ -4,14 +4,14 @@ Shows the progress of how much have the program loaded
 
 package mm.startGui;
 
-import mm.customObjects.SideFrame;
+import mm.customObjects.CustFrame;
 import mm.customObjects.Colors;
 import mm.Main;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class LoadingWindow <T extends SideFrame> extends InfoFrame implements Runnable {
+public class LoadingWindow <T extends CustFrame> extends InfoFrame implements Runnable {
 //    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 //    private Main main;
     private int [] window = new int[2];

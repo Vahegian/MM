@@ -12,16 +12,17 @@ import mm.database.DatabaseController;
 import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
 import mm.customObjects.CustTextPane;
-import mm.customObjects.SideFrame;
+import mm.customObjects.CustFrame;
 import mm.startGui.LoadingWindow;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CoinCapWindow extends SideFrame implements Runnable {
+public class CoinCapWindow extends CustFrame implements Runnable {
     private String TAG = "CoinCapWindows";
     private CoinCollector cc;
     private CoinCapWindow me = this;
@@ -29,6 +30,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
     private Map<String, CoinMarket> market;
     private Map<String, CustTextPane> coinNpaneMap;
     private Map<String , Double> prevPricesMap;
+    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
     private JPanel mainPanel;
 
@@ -41,8 +43,8 @@ public class CoinCapWindow extends SideFrame implements Runnable {
 
 
 
-        CustButton addCoinsBut = new CustButton("Add Coins",0,0,240,30);
-        CustButton refreshBut = new CustButton("Refresh",0,35,240,30);
+        CustButton addCoinsBut = new CustButton("Add Coins",0,yGap,240,30);
+        CustButton refreshBut = new CustButton("Refresh",0,yGap+35,240,30);
 
 
 
@@ -91,7 +93,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
             bt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    Main.workers.submit(new AddCoinWindow(me, cc));
+                    Main.workers.submit(new AddCoinWindow(dim.width/2, dim.height/2,me, cc));
                 }
             });
         }else if(bt.getText().equals("Refresh")){
@@ -201,7 +203,7 @@ public class CoinCapWindow extends SideFrame implements Runnable {
         }
 
         sp = new JScrollPane(mainPanel);
-        sp.setBounds(0,70,240,620);
+        sp.setBounds(0,yGap+70,240,620);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 

@@ -5,17 +5,16 @@ import mm.binance.binanceAPI.BinanceController;
 import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
 import mm.customObjects.CustTextPane;
-import mm.customObjects.SideFrame;
+import mm.customObjects.CustFrame;
 import mm.startGui.LoadingWindow;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
 import java.util.List;
 
-public class TradeHelperWindow extends SideFrame implements Runnable{
+public class TradeHelperWindow extends CustFrame implements Runnable{
     private String TAG = "Binance/TradeHelperWindow";
     private BinanceController bc;
     private Thread guiThread;
@@ -95,7 +94,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
     private void makeBottomPanelTwo() {
         JPanel b2Panel = new JPanel();
         b2Panel.setBackground(Colors.white);
-        b2Panel.setBounds(0,sy-100,sx,40);
+        b2Panel.setBounds(0,yGap+sy-100,sx,40);
 
         add(b2Panel);
     }
@@ -109,7 +108,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
         JPanel blPanel = new JPanel();
         blPanel.setBackground(Colors.white);
-        blPanel.setBounds(0,sy-60,sx,40);
+        blPanel.setBounds(0,yGap+sy-60,sx,40);
         blPanel.add(removeAll);
 
         add(blPanel);
@@ -147,7 +146,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         bottomPanel.add(totalAmountNowPane);
         bottomPanel.add(totalAmountBoughtHintArea);
         bottomPanel.add(totalAmountBoughtPane);
-        bottomPanel.setBounds(0,sy-140,sx,40);
+        bottomPanel.setBounds(0,yGap+sy-140,sx,40);
         bottomPanel.setBackground(Colors.white);
 
         add(bottomPanel);
@@ -247,7 +246,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 //        middlePanelHintsPanel.setLayout(new BoxLayout(middlePanelHintsPanel, BoxLayout.X_AXIS));
         middlePanelHintsPanel.setVisible(true);
 //        middlePanelHintsPanel.setLayout(null);
-        middlePanelHintsPanel.setBounds(0,40,sx,40);
+        middlePanelHintsPanel.setBounds(0,yGap+40,sx,40);
 
 
         middlePanel = new JPanel();
@@ -338,7 +337,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
         sp = new JScrollPane(middlePanel);
         sp.setBackground(Colors.white);
         sp.setBorder(BorderFactory.createEmptyBorder());
-        sp.setBounds(0,80,sx,380);
+        sp.setBounds(0,yGap+80,sx,380);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 //        sp.setBackground(Colors.lightBlue);
@@ -481,7 +480,7 @@ public class TradeHelperWindow extends SideFrame implements Runnable{
 
     private void makeTopPanel() {
         JPanel userInputPanel = new JPanel();
-        userInputPanel.setBounds(0,0, sx,40);
+        userInputPanel.setBounds(0,yGap, sx,40);
         userInputPanel.setBackground(Colors.white);
         coinTypeCombo = new JComboBox<String>();
         coinTypeCombo.setBackground(Colors.white);

@@ -2,14 +2,14 @@ package mm.mainWindow.backuppkg;
 
 import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
-import mm.customObjects.SideFrame;
+import mm.customObjects.CustFrame;
 //import sun.security.krb5.internal.PAData;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class BackupWindow extends SideFrame {
+public class BackupWindow extends CustFrame {
     private String pass = "";
     private Runtime r;
     private Process p;

@@ -5,17 +5,18 @@ import mm.binance.binanceAPI.BinanceController;
 import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
 import mm.customObjects.CustTextPane;
-import mm.customObjects.SideFrame;
+import mm.customObjects.CustFrame;
 import mm.startGui.LoadingWindow;
 //import mm.binance.binanceAPI.gui.coinCapWindows.AddCoinWindow;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CoinPricesWindow extends SideFrame implements Runnable{
+public class CoinPricesWindow extends CustFrame implements Runnable{
     private String TAG = "BinanceWindow\\subWindows\\CoinPricesWindow";
     private CoinPricesWindow me = this;
 
@@ -25,6 +26,7 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
     private HashMap<String, CustTextPane> coinNpaneMap;
     private JPanel mainPanel;
     private boolean showNetworkDialgue;
+    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
 //    private boolean isloaded = false;
 
@@ -35,8 +37,8 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
 //        new Thread(new LoadingWindow<>(this)).start();
         this.bc = bc;
 
-        CustButton addCoinsBut = new CustButton("Add Coins",0,0,240,30);
-        CustButton refreshBut = new CustButton("Refresh",0,35,240,30);
+        CustButton addCoinsBut = new CustButton("Add Coins",0,yGap,240,30);
+        CustButton refreshBut = new CustButton("Refresh",0,yGap+35,240,30);
 
         putCoins();
         updateCoins();
@@ -63,7 +65,7 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
             bt.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent actionEvent) {
-                    Main.workers.submit(new AddCoinWindow(me, bc));
+                    Main.workers.submit(new AddCoinWindow(dim.width/2, dim.height/2, me, bc));
                 }
             });
         }else if(bt.getText().equals("Refresh")){
@@ -178,7 +180,7 @@ public class CoinPricesWindow extends SideFrame implements Runnable{
         }
 
         sp = new JScrollPane(mainPanel);
-        sp.setBounds(0,70,240,620);
+        sp.setBounds(0,yGap+70,240,620);
         sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 

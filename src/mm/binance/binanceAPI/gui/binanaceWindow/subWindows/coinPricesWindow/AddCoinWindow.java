@@ -8,6 +8,7 @@ This class creates a window to get coin and ticker from user and add new coin in
 import mm.Main;
 import mm.binance.binanceAPI.BinanceController;
 import mm.customObjects.Colors;
+import mm.customObjects.CustFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,11 +16,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-class AddCoinWindow extends JFrame implements Runnable {
+class AddCoinWindow extends CustFrame implements Runnable {
     private BinanceController bc;
     private CoinPricesWindow context;
 //    private BinanceWindow context;
-    public AddCoinWindow(CoinPricesWindow context, BinanceController bc){
+    public AddCoinWindow(int lx, int ly, CoinPricesWindow context, BinanceController bc){
+        super("Add New Coin",lx-180,ly-60,360,120);
         this.bc = bc;
         this.context = context;
 //        this.context = context;
@@ -93,12 +95,12 @@ class AddCoinWindow extends JFrame implements Runnable {
         hintPanle.setLayout(null);
         hintPanle.add(coinHint); hintPanle.add(pairHint);
         hintPanle.setBackground(Colors.white);
-        hintPanle.setBounds(0,0,360,40);
+        hintPanle.setBounds(0,yGap,360,40);
 
         inputPanle.setLayout(null);
         inputPanle.add(coinText); inputPanle.add(pairText); inputPanle.add(addCoin);
         inputPanle.setBackground(Colors.white);
-        inputPanle.setBounds(0,40,360,40);
+        inputPanle.setBounds(0,yGap+40,360,40);
 
 
 
@@ -106,13 +108,6 @@ class AddCoinWindow extends JFrame implements Runnable {
         add(inputPanle);
         add(hintPanle);
 
-        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-
-        setResizable(false);
-        setTitle("Add New Coin Pair");
-        setBackground(Colors.white);
-        setBounds(dim.width/2-180,dim.height/2-60,360,120);
-        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setVisible(true);
 
         repaint();
