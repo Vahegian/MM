@@ -52,7 +52,7 @@ public class CustTextPane extends JTextPane {
                 if(withDollarSign) this.setText("     \u0024" + text);
                 else this.setText("     " + text);
             } else if (type == 2)
-                this.setText("     "+text);
+                this.setText(""+text);
             else throw new IllegalArgumentException("Wrong Type!");
         }
     }

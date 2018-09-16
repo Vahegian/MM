@@ -26,12 +26,18 @@ public class LoginWindow extends InfoFrame {
         setOpacity(0.9f);
         setAlwaysOnTop(false);
         killAllWindows = true;
+        dontShowTitle();
         makeTopButtons();
         makeMainPanel();
         addListenersTobjects();
 
         add(toolPanel);
         add(mainPanel);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         repaint();
     }
 
@@ -86,14 +92,17 @@ public class LoginWindow extends InfoFrame {
 
         JTextArea namehint = new JTextArea("\ndb Name:");
         namehint.setBackground(Colors.white);
+        namehint.setForeground(Colors.blue);
         namehint.setEditable(false);
         namehint.setBounds(0,0,100,50);
         JTextArea userhint = new JTextArea("\nUser:");
         userhint.setBackground(Colors.white);
+        userhint.setForeground(Colors.blue);
         userhint.setEditable(false);
         userhint.setBounds(0,50,100,50);
         JTextArea passhint = new JTextArea("\nPassword:");
         passhint.setBackground(Colors.white);
+        passhint.setForeground(Colors.blue);
         passhint.setEditable(false);
         passhint.setBounds(0,100,100,50);
         mainPanel.add(namehint);

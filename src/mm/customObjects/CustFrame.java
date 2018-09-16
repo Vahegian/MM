@@ -1,12 +1,12 @@
 package mm.customObjects;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 
 public abstract class CustFrame extends JFrame {
+    private final String title;
     public JPanel toolPanel;
-    public int sx,sy, yGap;
+    public int lx, ly, sx, sy, yGap;
     protected JScrollPane sp;
 //    public static boolean state = true;
     protected final int [] windowNumber = new int[1];
@@ -16,31 +16,20 @@ public abstract class CustFrame extends JFrame {
     protected final boolean[] windowsStates = {false,false,false,false};
 
     public final int[] progress = {0};
+    private boolean mouseisClicked = false;
+    private CustButton exitBut;
+    private CustTextPane frameName;
 
-    public CustFrame(String title, int lx, int ly, int sX, int sY) {
-        this.sx = sX; this.sy = sY; this.yGap = 30;
+    public CustFrame(String title, int lX, int lY, int sX, int sY) {
+        this.title = title; this.lx = lY; this.ly = lY; this.sx = sX; this.sy = sY; this.yGap = 30;
 //        setOpacity(0.9f);
         getRootPane().setWindowDecorationStyle(JRootPane.NONE);
         setUndecorated(true);
-        toolPanel = new JPanel();
-        toolPanel.setLayout(null);
-        toolPanel.setBackground(Colors.white);
-        toolPanel.setBounds(0,0,sx,yGap);
-        CustButton exitBut = new CustButton("X", 0, 0, 50, yGap);
-        exitBut.setForeground(Colors.red);
-        exitBut.setBorder(BorderFactory.createEmptyBorder());
-        toolPanel.add(exitBut);
-        add(toolPanel);
-        exitBut.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(killAllWindows) System.exit(1);
-                else I.dispose();
-            }
-        });
+        makeTheRootPanel();
+        addListenersToRootPanel();
         setLayout(null);
 //        setContentPane(sp);
-        setBounds(lx,ly,sX,sY);
+        setBounds(lX,lY,sX,sY);
 //        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setResizable(false);
         setBackground(Colors.white);
@@ -51,6 +40,55 @@ public abstract class CustFrame extends JFrame {
 
 //        state = this.hasFocus();
 
+    }
+
+    private void addListenersToRootPanel() {
+        exitBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(killAllWindows) System.exit(1);
+                else I.dispose();
+            }
+        });
+
+
+        toolPanel.addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                lx = e.getXOnScreen(); ly = e.getYOnScreen();
+                setBounds(lx, ly, sx, sy);
+                repaint();
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+            }
+        });
+    }
+
+    private void makeTheRootPanel() {
+        toolPanel = new JPanel();
+        toolPanel.setLayout(null);
+        toolPanel.setBackground(Colors.white);
+        toolPanel.setBounds(0,0,sx,yGap);
+
+        exitBut = new CustButton("X", 0, 0, 50, yGap);
+        exitBut.setForeground(Colors.red);
+        exitBut.setBorder(BorderFactory.createEmptyBorder());
+
+        frameName = new CustTextPane(this.title, 2, "LEFT");
+        frameName.setBounds(sx-150,yGap-25,150, yGap);
+
+        toolPanel.add(frameName);
+        toolPanel.add(exitBut);
+
+        add(toolPanel);
+
+
+    }
+
+    public void dontShowTitle(){
+        toolPanel.remove(frameName);
     }
 
     protected void checkState(CustFrame o){
