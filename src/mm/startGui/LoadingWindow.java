@@ -32,7 +32,9 @@ public class LoadingWindow <T extends CustFrame> extends InfoFrame implements Ru
 
     @Override
     public void paint(Graphics graphics) {
-        panel.paint(graphics);
+        try {
+            panel.paint(graphics);
+        }catch (Exception e){}
         g = (Graphics2D)graphics;
 //        g.fillRect(0,0,10,10);
         paintProgress(g);

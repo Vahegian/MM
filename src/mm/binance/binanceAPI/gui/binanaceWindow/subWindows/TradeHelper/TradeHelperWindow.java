@@ -417,7 +417,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
                     items.add(p4);
 //                    ((JButton)listWithAddeditems.get(i).get("removebutton"))
                     CustTextPane p5 = (CustTextPane)listWithAddeditems.get(i).get(HOWMANYPANEKEY);
-                    p5.withDollarSign = true;
+//                    p5.withDollarSign = true;
 //                    p5.setBounds((sx/7)*4,0,sx/7,height);
                     items.add(p5);
 
