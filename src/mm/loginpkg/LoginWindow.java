@@ -9,6 +9,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 public class LoginWindow extends InfoFrame {
     private CustButton exitBut;
@@ -18,6 +20,7 @@ public class LoginWindow extends InfoFrame {
     private JTextField dbUser;
     private JPasswordField dbPassword;
     private LoginWindow me = this;
+    private int fields = 1;
     Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
 
@@ -45,18 +48,38 @@ public class LoginWindow extends InfoFrame {
         enterBut.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String user=dbUser.getText();
-                String passw=dbPassword.getText();
-                String dbname=dbName.getText();
-                if(checkUserData(user,passw,dbname)){
-                    try {
-                        MainFrame frame = new MainFrame(dim.width/2, dim.height/2, dim);
-                        if (frame.getDBnUser(dbname,user,passw)) {
-                            frame.makeTheFrame();
-                            me.dispose();
-                        }else showDialog();
-                    }catch (Exception e1){System.err.println(e1+"");}
+                login();
+            }
+        });
+
+        dbPassword.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                    login();
                 }
+
+//                if(e.getKeyCode() == KeyEvent.VK_DOWN){
+//                    if(fields ==1){
+//                        dbName.requestFocus();
+//                    }else if (fields == 2){
+//                        dbUser.requestFocus();
+//                    }else if (fields == 3){
+//                        dbPassword.requestFocus();
+//                    }
+//                    if(fields<3) fields++;
+//                    else fields = 1;
+//                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
             }
         });
 
@@ -66,6 +89,21 @@ public class LoginWindow extends InfoFrame {
 //
 //            }
 //        });
+    }
+
+    private void login() {
+        String user=dbUser.getText();
+        String passw=dbPassword.getText();
+        String dbname=dbName.getText();
+        if(checkUserData(user,passw,dbname)){
+            try {
+                MainFrame frame = new MainFrame(dim.width/2, dim.height/2, dim);
+                if (frame.getDBnUser(dbname,user,passw)) {
+                    frame.makeTheFrame();
+                    me.dispose();
+                }else showDialog();
+            }catch (Exception e1){System.err.println(e1+"");}
+        }
     }
 
     private boolean checkUserData(String user, String pass, String dbname) {

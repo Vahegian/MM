@@ -15,9 +15,9 @@ public class BackupWindow extends CustFrame {
     private Process p;
     public BackupWindow(String title, int lx, int ly) {
         super(title, lx, ly, 450, 70);
-
+        showMessage("Make sure that 'mmdump.sh' file is in 'usr/share/MM' folder");
         JPanel mainPanel = new JPanel();
-        mainPanel.setBounds(0,0,sx,sy);
+        mainPanel.setBounds(0,yGap,sx,sy);
         mainPanel.setBackground(Colors.white);
         JTextArea userhint = new JTextArea("User");
         userhint.setBackground(Colors.white);
@@ -84,12 +84,16 @@ public class BackupWindow extends CustFrame {
         for(String d:data){
 //            System.err.println(d);
             if(d.length()<1){
-                JOptionPane info = new JOptionPane();
-                info.setMessage("Incomplete data");
-                info.createDialog("INFO").show();
+                showMessage("Incomplete Data!");
                 return false;
             }
         }
         return true;
+    }
+
+    private void showMessage(String s) {
+        JOptionPane info = new JOptionPane();
+        info.setMessage(s);
+        info.createDialog("INFO").show();
     }
 }

@@ -9,6 +9,7 @@ import mm.customObjects.CustFrame;
 import mm.startGui.LoadingWindow;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -44,6 +45,9 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
     static final String FEEKEY="fee";
     static final String HOWMANYPANEKEY = "howmanymore";
     static final String HOWMUCHISTOTALPANEKEY = "rowtotal";
+    private CustTextPane totalProfitPaneGBP;
+    private CustTextPane totalAmountNowPaneGBP;
+    private CustTextPane totalAmountBoughtGBP;
 
     public TradeHelperWindow(String title, int lx, int ly,BinanceController bc) {
         super(title, lx-380, ly-300, 760, 600);
@@ -116,19 +120,29 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
 
     private void makeBottomPanelOne() {
         JTextArea totalProfitHintArea = new JTextArea();
-        totalProfitHintArea.setText("Total profit");
+        totalProfitHintArea.setText("Profit:");
         totalProfitHintArea.setBorder(BorderFactory.createEmptyBorder());
         totalProfitHintArea.setEditable(false); totalProfitHintArea.setVisible(true);
 
         totalProfitPane = new CustTextPane("0",1,"LEFT" );
         totalProfitPane.setPaneColor(Colors.green,"green");
+        totalProfitPane.withDollarSign = true;
+
+        totalProfitPaneGBP = new CustTextPane("0",1,"LEFT");
+        totalProfitPaneGBP.setPaneColor(Colors.green,"green");
+        totalProfitPaneGBP.withPoundSign = true;
 
         JTextArea totalAmountNowHintArea = new JTextArea();
-        totalAmountNowHintArea.setText("Total Amount Now");
+        totalAmountNowHintArea.setText("Total Now:");
         totalAmountNowHintArea.setBorder(BorderFactory.createEmptyBorder());
         totalAmountNowHintArea.setEditable(false); totalAmountNowHintArea.setVisible(true);
 
         totalAmountNowPane = new CustTextPane("0", 1,"LEFT");
+        totalAmountNowPane.withDollarSign =true;
+
+        totalAmountNowPaneGBP = new CustTextPane("0",1,"LEFT");
+        totalAmountNowPaneGBP.withPoundSign = true;
+
 
         JTextArea totalAmountBoughtHintArea = new JTextArea();
         totalAmountBoughtHintArea.setText("Total Bought");
@@ -136,20 +150,31 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         totalAmountBoughtHintArea.setEditable(false); totalAmountBoughtHintArea.setVisible(true);
 
         totalAmountBoughtPane = new CustTextPane("0", 1,"LEFT");
+        totalAmountBoughtPane.withDollarSign = true;
+        totalAmountBoughtGBP = new CustTextPane("0",1,"LEFT");
+        totalAmountBoughtGBP.withPoundSign = true;
 
 
         JPanel bottomPanel = new JPanel();
 //        bottomPanel.add(removeAll);
         bottomPanel.add(totalProfitHintArea);
         bottomPanel.add(totalProfitPane);
+        bottomPanel.add(totalProfitPaneGBP);
         bottomPanel.add(totalAmountNowHintArea);
         bottomPanel.add(totalAmountNowPane);
-        bottomPanel.add(totalAmountBoughtHintArea);
-        bottomPanel.add(totalAmountBoughtPane);
+        bottomPanel.add(totalAmountNowPaneGBP);
         bottomPanel.setBounds(0,yGap+sy-140,sx,40);
         bottomPanel.setBackground(Colors.white);
 
+        JPanel bottomPanel2 = new JPanel();
+        bottomPanel2.add(totalAmountBoughtHintArea);
+        bottomPanel2.add(totalAmountBoughtPane);
+        bottomPanel2.add(totalAmountBoughtGBP);
+        bottomPanel2.setBounds(0,yGap+sy-100,sx,40);
+        bottomPanel2.setBackground(Colors.white);
+
         add(bottomPanel);
+        add(bottomPanel2);
     }
 
     private void addListenersToObjects(){
@@ -387,14 +412,17 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
 
 //                    ((CustTextPane)listWithAddeditems.get(i).get("profitpane")).setMaximumSize(panedim);
                     CustTextPane p4 = (CustTextPane)listWithAddeditems.get(i).get(PROFITKEY);
+                    p4.withDollarSign = true;
 //                    p4.setBounds((sx/7)*3,0,sx/7,height);
                     items.add(p4);
 //                    ((JButton)listWithAddeditems.get(i).get("removebutton"))
                     CustTextPane p5 = (CustTextPane)listWithAddeditems.get(i).get(HOWMANYPANEKEY);
+                    p5.withDollarSign = true;
 //                    p5.setBounds((sx/7)*4,0,sx/7,height);
                     items.add(p5);
 
                     CustTextPane p6 = (CustTextPane)listWithAddeditems.get(i).get(HOWMUCHISTOTALPANEKEY);
+                    p6.withDollarSign = true;
 //                    p6.setBounds((sx/7)*5,0,sx/7,height);
                     items.add(p6);
 
@@ -549,6 +577,8 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         thl.updateTotalAmountNow(listWithAddeditems, totalAmountNowPane);
         thl.updateHowManyCanBuy(listWithAddeditems);
         thl.updateTotalOfaRow(listWithAddeditems);
+        thl.updateUSDtoGBP(totalProfitPane, totalProfitPaneGBP, totalAmountNowPane, totalAmountNowPaneGBP);
+        thl.updateTotalAmountBought(listWithAddeditems, totalAmountBoughtPane, totalAmountBoughtGBP);
     }
 
 
@@ -558,7 +588,6 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         Main.plusThread();
         try {
             Thread.sleep(3000);
-            thl.updateTotalAmountBought(listWithAddeditems, totalAmountBoughtPane);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

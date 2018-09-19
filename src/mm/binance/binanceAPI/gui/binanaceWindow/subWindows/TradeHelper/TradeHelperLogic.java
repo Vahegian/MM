@@ -1,5 +1,8 @@
 package mm.binance.binanceAPI.gui.binanaceWindow.subWindows.TradeHelper;
 
+import com.tunyk.currencyconverter.BankUaCom;
+import com.tunyk.currencyconverter.api.Currency;
+import com.tunyk.currencyconverter.api.CurrencyConverterException;
 import mm.Main;
 import mm.binance.binanceAPI.BinanceController;
 import mm.customObjects.Colors;
@@ -20,6 +23,7 @@ public class TradeHelperLogic implements Runnable {
     private Map<String, Double> lastPrices;
     private Double updateTotalAmountNowtemp = 0.0;
     private Map<JTextField, Double> tempHowMuchIsTotal = new HashMap<JTextField, Double>() ;
+    private BankUaCom currencyConverter;
 
     public TradeHelperLogic(BinanceController bc){
 
@@ -111,7 +115,7 @@ public class TradeHelperLogic implements Runnable {
         updateTotalAmountNowtemp = totalAmount;
     }
 
-    public void updateTotalAmountBought(List<HashMap<String, Object>> listWithAddeditems, CustTextPane totalAmountBoughtPane) {
+    public void updateTotalAmountBought(List<HashMap<String, Object>> listWithAddeditems, CustTextPane totalAmountBoughtPane, CustTextPane totalboughtGBP) {
         Double totalAmountBought = 0.0;
         for(HashMap<String, Object> o: listWithAddeditems){
             String amount = ((JTextField) o.get(TradeHelperWindow.AMOUNTKEY)).getText();
@@ -121,6 +125,12 @@ public class TradeHelperLogic implements Runnable {
         }
         totalAmountBoughtPane.setText("$"+new DecimalFormat("#0.00000").format(totalAmountBought));
         totalAmountBoughtPane.setForeground(Colors.blue);
+        try {
+            totalboughtGBP.setPaneText(currencyConverter.convertCurrency(totalAmountBought.floatValue()).toString());
+            totalboughtGBP.setForeground(Colors.blue);
+        } catch (CurrencyConverterException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateHowManyCanBuy(List<HashMap<String, Object>> listWithAddeditems) {
@@ -172,9 +182,27 @@ public class TradeHelperLogic implements Runnable {
         tempHowMuchIsTotal.replace(pairkey, total);
     }
 
+    public void updateUSDtoGBP(CustTextPane totalProfitPane, CustTextPane totalprofitgbp, CustTextPane totalAmountNowPane, CustTextPane totalamountgbp) {
+        float totalprofit = (float) Double.parseDouble(totalProfitPane.getPlainText());
+        float totalamount = (float) Double.parseDouble(totalAmountNowPane.getPlainText());
+        try {
+            totalprofitgbp.setPaneText(currencyConverter.convertCurrency(totalprofit).toString());
+            totalprofitgbp.setPaneColor((Color)totalProfitPane.getColors()[0], (String) totalProfitPane.getColors()[1]);
+            totalamountgbp.setPaneText(currencyConverter.convertCurrency(totalamount).toString());
+            totalamountgbp.setPaneColor((Color)totalAmountNowPane.getColors()[0], (String) totalAmountNowPane.getColors()[1]);
+        } catch (CurrencyConverterException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run() {
         Main.plusThread();
+        try {
+            currencyConverter = new BankUaCom(Currency.USD, Currency.GBP);
+        } catch (CurrencyConverterException e) {
+            e.printStackTrace();
+        }
         while (!stopTHLThread[0]) {
             try {
                 getLastPrices();
@@ -186,4 +214,5 @@ public class TradeHelperLogic implements Runnable {
         System.err.println(TAG+" > Thread Stopped");
         Main.minusThread();
     }
+
 }

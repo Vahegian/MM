@@ -8,14 +8,18 @@ package mm.customObjects;
 import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.Objects;
 
 public class CustTextPane extends JTextPane {
     private String color = "black";
-    private String align = "";
+    private String align;
     private String text;
     private String dir = "";
     private int type;
-    public boolean withDollarSign = true;
+    public boolean withDollarSign = false;
+    public boolean withPoundSign = false;
+    private Color colorObject;
+
     public CustTextPane(String tx, int type, String alignment){
         this.text = tx;
         this.type = type;
@@ -32,15 +36,18 @@ public class CustTextPane extends JTextPane {
     }
 
     public void setPaneText(String tx){
+//        if(!withPoundSign && !withDollarSign) withDollarSign = true;
+
         this.text = tx;
-        if(align.equals(new String ("CENTER"))) {
+        if(align.equals("CENTER")) {
             if (type == 1) {
                 text = new DecimalFormat("#0.00000").format(Double.parseDouble(text));
-                this.setText("<HTML><BODY><CENTER><font color=\""+color+"\">"+ "\u0024"+text+"</font></CENTER></BODY></HTML>");
+                if(withDollarSign) this.setText("<HTML><BODY><CENTER><font color=\""+ color +"\">"+ "\u0024"+text+"</font></CENTER></BODY></HTML>");
+                else this.setText("<HTML><BODY><CENTER><font color=\""+ color +"\">"+ ""+text+"</font></CENTER></BODY></HTML>");
             } else if (type == 2)
                 this.setText("<HTML><BODY><CENTER><font color=\"navy\">" + text + "</font></CENTER></BODY></HTML>");
             else throw new IllegalArgumentException("Wrong Type!");
-        }else if (align.equals(new String ("LEFT"))){
+        }else if (align.equals("LEFT")){
             if (type == 1) {
                 text = new DecimalFormat("#000.00000").format(Double.parseDouble(text));
                 if(text.length()<10){
@@ -49,7 +56,9 @@ public class CustTextPane extends JTextPane {
                         text+='0';
                     }
                 }
+
                 if(withDollarSign) this.setText("     \u0024" + text);
+                else if (withPoundSign) this.setText("     \u00A3" + text);
                 else this.setText("     " + text);
             } else if (type == 2)
                 this.setText(""+text);
@@ -58,6 +67,8 @@ public class CustTextPane extends JTextPane {
     }
 
     public void setPaneColor(Color col, String color){
+        colorObject = col;
+        this.color = color;
         if(align.equals("LEFT")) {
             this.setForeground(col);
             if(col.equals(Colors.green))dir = "UP";
@@ -73,6 +84,11 @@ public class CustTextPane extends JTextPane {
     }
 
     public String getPlainText(){return text;}
+
+    public Object[] getColors(){
+        Object o[] =  {colorObject,color};
+        return o;
+    }
 
     @Override
     public void paint(Graphics g) {
