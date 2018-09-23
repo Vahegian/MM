@@ -284,63 +284,73 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
 //        System.err.println(((JTextField)listWithAddeditems.get(0).get(PAIRKEY)).getColumns());
 //        System.err.println(((JTextField)listWithAddeditems.get(0).get(PRICEKEY)).getColumns());
 //        System.err.println(((CustTextPane)listWithAddeditems.get(0).get(PROFITKEY)).getWidth());
-
+        middlePanelHintsPanel.setLayout(null);
         int colNum = 10;
+        int paneGap = 50;
         JTextField pairHint = new JTextField();
         pairHint.setEditable(false);
         pairHint.setBackground(Colors.white);
         pairHint.setForeground(Colors.blue);
         pairHint.setText("Pairs");
-        pairHint.setColumns(colNum);
+//        pairHint.setColumns(colNum);
         pairHint.setBorder(BorderFactory.createEmptyBorder());
+//        pairHint.setLayout(null);
+        pairHint.setBounds((sx-(7*108))+colNum,0,100,30);
 
         JTextField amountHint = new JTextField();
         amountHint.setEditable(false);
         amountHint.setBackground(Colors.white);
         amountHint.setForeground(Colors.blue);
         amountHint.setText("Amount");
-        amountHint.setColumns(colNum);
+//        amountHint.setColumns(colNum);
         amountHint.setBorder(BorderFactory.createEmptyBorder());
+//        amountHint.setLayout(null);
+        amountHint.setBounds((sx-(6*108))+colNum,0,100,30);
 
         JTextField priceOfOneHint = new JTextField();
         priceOfOneHint.setEditable(false);
         priceOfOneHint.setBackground(Colors.white);
         priceOfOneHint.setForeground(Colors.blue);
-        priceOfOneHint.setText("Price bought/$");
-        priceOfOneHint.setColumns(colNum);
+        priceOfOneHint.setText("Bought at $");
+//        priceOfOneHint.setColumns(colNum);
         priceOfOneHint.setBorder(BorderFactory.createEmptyBorder());
+        priceOfOneHint.setBounds((sx-(5*108))+colNum,0,100,30);
 
         JTextField profitHint = new JTextField();
         profitHint.setEditable(false);
         profitHint.setBackground(Colors.white);
         profitHint.setForeground(Colors.blue);
         profitHint.setText("Profit - Loss");
-        profitHint.setColumns(colNum+2);
+//        profitHint.setColumns(colNum+2);
         profitHint.setBorder(BorderFactory.createEmptyBorder());
+
+        profitHint.setBounds((sx-(4*108))+paneGap,0,100,30);
 
         JTextField howManyHint = new JTextField();
         howManyHint.setEditable(false);
         howManyHint.setBackground(Colors.white);
         howManyHint.setForeground(Colors.blue);
-        howManyHint.setText("Can Buy");
-        howManyHint.setColumns(colNum+2);
+        howManyHint.setText("Buy more");
+//        howManyHint.setColumns(colNum+2);
         howManyHint.setBorder(BorderFactory.createEmptyBorder());
+        howManyHint.setBounds((sx-(3*108))+paneGap,0,100,30);
 
         JTextField totalHint = new JTextField();
         totalHint.setEditable(false);
         totalHint.setBackground(Colors.white);
         totalHint.setForeground(Colors.blue);
-        totalHint.setText("Total $");
-        totalHint.setColumns(colNum+2);
+        totalHint.setText("     Total");
+//        totalHint.setColumns(colNum+2);
         totalHint.setBorder(BorderFactory.createEmptyBorder());
+        totalHint.setBounds((sx-(2*108))+paneGap,0,100,30);
 
-        JTextField removeHint = new JTextField();
-        removeHint.setEditable(false);
-        removeHint.setBackground(Colors.white);
-        removeHint.setForeground(Colors.blue);
-        removeHint.setText("      ");
-        removeHint.setColumns(colNum);
-        removeHint.setBorder(BorderFactory.createEmptyBorder());
+//        JTextField removeHint = new JTextField();
+//        removeHint.setEditable(false);
+//        removeHint.setBackground(Colors.white);
+//        removeHint.setForeground(Colors.blue);
+//        removeHint.setText("      ");
+//        removeHint.setColumns(colNum);
+//        removeHint.setBorder(BorderFactory.createEmptyBorder());
 
 //        pairHint.setBounds(0,0,sx/7,40);
         middlePanelHintsPanel.add(pairHint);
@@ -356,7 +366,85 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         middlePanelHintsPanel.add(totalHint);
 //        middlePanelHintsPanel.add(removeHint);
         add(middlePanelHintsPanel);
+        repaint();
     }
+//    private void addHintsToMiddlePanelHintPanel() {
+////        System.err.println(((JTextField)listWithAddeditems.get(0).get(PAIRKEY)).getColumns());
+////        System.err.println(((JTextField)listWithAddeditems.get(0).get(PRICEKEY)).getColumns());
+////        System.err.println(((CustTextPane)listWithAddeditems.get(0).get(PROFITKEY)).getWidth());
+//
+//        int colNum = 10;
+//        JTextField pairHint = new JTextField();
+//        pairHint.setEditable(false);
+//        pairHint.setBackground(Colors.white);
+//        pairHint.setForeground(Colors.blue);
+//        pairHint.setText("Pairs");
+//        pairHint.setColumns(colNum);
+//        pairHint.setBorder(BorderFactory.createEmptyBorder());
+//
+//        JTextField amountHint = new JTextField();
+//        amountHint.setEditable(false);
+//        amountHint.setBackground(Colors.white);
+//        amountHint.setForeground(Colors.blue);
+//        amountHint.setText("Amount");
+//        amountHint.setColumns(colNum);
+//        amountHint.setBorder(BorderFactory.createEmptyBorder());
+//
+//        JTextField priceOfOneHint = new JTextField();
+//        priceOfOneHint.setEditable(false);
+//        priceOfOneHint.setBackground(Colors.white);
+//        priceOfOneHint.setForeground(Colors.blue);
+//        priceOfOneHint.setText("Price bought/$");
+//        priceOfOneHint.setColumns(colNum);
+//        priceOfOneHint.setBorder(BorderFactory.createEmptyBorder());
+//
+//        JTextField profitHint = new JTextField();
+//        profitHint.setEditable(false);
+//        profitHint.setBackground(Colors.white);
+//        profitHint.setForeground(Colors.blue);
+//        profitHint.setText("Profit - Loss");
+//        profitHint.setColumns(colNum+2);
+//        profitHint.setBorder(BorderFactory.createEmptyBorder());
+//
+//        JTextField howManyHint = new JTextField();
+//        howManyHint.setEditable(false);
+//        howManyHint.setBackground(Colors.white);
+//        howManyHint.setForeground(Colors.blue);
+//        howManyHint.setText("Can Buy");
+//        howManyHint.setColumns(colNum+2);
+//        howManyHint.setBorder(BorderFactory.createEmptyBorder());
+//
+//        JTextField totalHint = new JTextField();
+//        totalHint.setEditable(false);
+//        totalHint.setBackground(Colors.white);
+//        totalHint.setForeground(Colors.blue);
+//        totalHint.setText("Total $");
+//        totalHint.setColumns(colNum+2);
+//        totalHint.setBorder(BorderFactory.createEmptyBorder());
+//
+//        JTextField removeHint = new JTextField();
+//        removeHint.setEditable(false);
+//        removeHint.setBackground(Colors.white);
+//        removeHint.setForeground(Colors.blue);
+//        removeHint.setText("      ");
+//        removeHint.setColumns(colNum);
+//        removeHint.setBorder(BorderFactory.createEmptyBorder());
+//
+////        pairHint.setBounds(0,0,sx/7,40);
+//        middlePanelHintsPanel.add(pairHint);
+////        amountHint.setBounds((sx/7),0,sx/7,40);
+//        middlePanelHintsPanel.add(amountHint);
+////        priceOfOneHint.setBounds((sx/7)*2,0,sx/7,40);
+//        middlePanelHintsPanel.add(priceOfOneHint);
+////        profitHint.setBounds((sx/7)*3,0,sx/7,40);
+//        middlePanelHintsPanel.add(profitHint);
+////        howManyHint.setBounds((sx/7)*4,0,sx/7,40);
+//        middlePanelHintsPanel.add(howManyHint);
+////        totalHint.setBounds((sx/7)*5,0,sx/7,40);
+//        middlePanelHintsPanel.add(totalHint);
+////        middlePanelHintsPanel.add(removeHint);
+//        add(middlePanelHintsPanel);
+//    }
 
     private void putMiddlePanlelInScrollView(){
         sp = new JScrollPane(middlePanel);
