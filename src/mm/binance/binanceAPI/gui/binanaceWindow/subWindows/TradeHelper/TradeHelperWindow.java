@@ -367,6 +367,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 //        sp.setBackground(Colors.lightBlue);
         add(sp);
+        repaint();
     }
 
     private void addItemsFromDBtoMiddlePanel(){
@@ -441,7 +442,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
 
     private void addItemsToList(String pairs, String camount, String oprice, String tfee){
 //        listWithAddeditems = new LinkedList<List<Object>>();
-        Map<String,Object> map = new HashMap<String, Object>();
+        HashMap<String, Object> map = new HashMap<String, Object>();
 
         JTextField pair = new JTextField();
         pair.setEditable(false);
@@ -503,7 +504,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
 //        CustTextPane remove = new CustTextPane("Remove",2,"CENTER");
         map.put(REMOVEBUTKEY,remove);
         map.put(FEEKEY,new String(tfee));
-        listWithAddeditems.add((HashMap<String, Object>) map);
+        listWithAddeditems.add(map);
     }
 
     private void makeTopPanel() {

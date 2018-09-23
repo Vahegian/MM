@@ -57,8 +57,8 @@ public class CustTextPane extends JTextPane {
                     }
                 }
 
-                if(withDollarSign) this.setText("     \u0024" + text);
-                else if (withPoundSign) this.setText("     \u00A3" + text);
+                if(withDollarSign && !withPoundSign) this.setText("     \u0024" + text);
+                else if (!withDollarSign && withPoundSign) this.setText("     \u00A3" + text);
                 else this.setText("     " + text);
             } else if (type == 2)
                 this.setText(""+text);
