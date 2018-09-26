@@ -4,6 +4,8 @@ import mm.customObjects.Colors;
 import mm.customObjects.CustTextPane;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class PairItemsPanel extends JPanel {
     private final int fieldwidth = 7;
@@ -15,8 +17,12 @@ public class PairItemsPanel extends JPanel {
     public CustTextPane p6;
     public CustTextPane p7;
     public JButton p8;
-
-    public PairItemsPanel(int width, int height, String s1, String s2, String s3, String s4){
+    private PairItemsPanel I = this;
+    private int ID;
+    private TradeHelperWindow thw;
+    public PairItemsPanel(TradeHelperWindow thw, int id, int width, int height, String s1, String s2, String s3, String s4){
+        this.ID = id;
+        this.thw = thw;
         setBounds(0, 0, width, height);
 //        setLayout(null);
 //                    items.setLayout(null);
@@ -108,7 +114,18 @@ public class PairItemsPanel extends JPanel {
         p8.setBorder(BorderFactory.createEmptyBorder());
 //                    p7.setBounds((sx/7)*6,0,sx/7,height);
         add(p8);
+
+        p8.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                thw.removePanelFromMiddlePanel(I.ID);
+            }
+        });
     }
 
     public PairItemsPanel(){}
+
+    public void setID(int id) {
+        I.ID = id;
+    }
 }

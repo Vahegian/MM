@@ -10,7 +10,7 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
-public class CustTextPane extends JTextPane {
+public class CustTextPane extends JTextField {
     private String color = "black";
     private String align;
     private String text;
@@ -27,9 +27,11 @@ public class CustTextPane extends JTextPane {
         setBackground(Colors.white);
         setEditable(false);
         setVisible(true);
+        setColumns(10);
+        setBorder(BorderFactory.createEmptyBorder());
 
-        if(align.equals("CENTER"))
-            setContentType("text/html");
+//        if(align.equals("CENTER"))
+//            setContentType("text/html");
 
         setPaneText(text);
 

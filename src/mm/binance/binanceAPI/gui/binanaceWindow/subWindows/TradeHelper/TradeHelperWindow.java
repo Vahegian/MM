@@ -9,7 +9,6 @@ import mm.customObjects.CustFrame;
 import mm.startGui.LoadingWindow;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -25,11 +24,11 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
     private JTextArea fee;
     private CustButton addBut;
     private JPanel middlePanel;
-    private List<HashMap<String, Object>> listWithAddeditems;
+    private List<PairItemsPanel> listWithAddeditems;
     private JPanel items;
     private int numperOfItems=-1;
     private TradeHelperLogic thl;
-    private CustButton removeAll;
+    private CustButton updateBut;
     private int numperOfItemListeners=-1;
     private int ipos;
     private CustTextPane totalProfitPane;
@@ -48,6 +47,9 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
     private CustTextPane totalProfitPaneGBP;
     private CustTextPane totalAmountNowPaneGBP;
     private CustTextPane totalAmountBoughtGBP;
+    private int id;
+    private boolean stopUpdate = false;
+    private TradeHelperWindow I = this;
 
     public TradeHelperWindow(String title, int lx, int ly,BinanceController bc) {
         super(title, lx-380, ly-300, 760, 600);
@@ -56,7 +58,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         Main.workers.submit(new LoadingWindow<>(this));
         thl = new TradeHelperLogic(bc);
 
-        listWithAddeditems = new LinkedList<HashMap<String, Object>>();
+        listWithAddeditems = new LinkedList<PairItemsPanel>();
 
 //        thl.makeTable();
 //        thl.dropTheTable();
@@ -86,8 +88,12 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         makeTopPanel();
         makeMiddlePanel();
         System.err.println("halfway");
-        addItemsFromDBtoMiddlePanel();
+        addItemsFromDBtoList();
+        System.err.println("1");
+        addItemsToMiddlePanel();
+        System.err.println("2");
         addHintsToMiddlePanelHintPanel();
+        System.err.println("3");
         putMiddlePanlelInScrollView();
         makeBottomPanelOne();
         makeBottomPanelTwo();
@@ -104,16 +110,16 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
     }
 
     private void makeLastBottomPanel() {
-        removeAll = new  CustButton("Remove All",0,0,sx,40);
-        removeAll.setBorder(BorderFactory.createEmptyBorder());
-        removeAll.setBounds(0,0,sx,40);
-        removeAll.setForeground(Colors.red);
-        removeAll.setVisible(true);
+        updateBut = new  CustButton("UPDATE",0,0,sx,40);
+        updateBut.setBorder(BorderFactory.createEmptyBorder());
+        updateBut.setBounds(0,0,sx,40);
+        updateBut.setForeground(Colors.blue);
+        updateBut.setVisible(true);
 
         JPanel blPanel = new JPanel();
         blPanel.setBackground(Colors.white);
         blPanel.setBounds(0,yGap+sy-60,sx,40);
-        blPanel.add(removeAll);
+        blPanel.add(updateBut);
 
         add(blPanel);
     }
@@ -156,7 +162,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
 
 
         JPanel bottomPanel = new JPanel();
-//        bottomPanel.add(removeAll);
+//        bottomPanel.add(updateBut);
         bottomPanel.add(totalProfitHintArea);
         bottomPanel.add(totalProfitPane);
         bottomPanel.add(totalProfitPaneGBP);
@@ -193,14 +199,19 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
                     textBox = 2;
                     Double.parseDouble(fee.getText());
 
-                    addItemsToList(coinTypeCombo.getSelectedItem().toString(), amount.getText(), buyPrice.getText(), fee.getText());
-
+                    addItemsToList(id, coinTypeCombo.getSelectedItem().toString(), amount.getText(), buyPrice.getText(), fee.getText());
+                    id++;
                     addItemsFromlistToDB();
-                    addItemsFromDBtoMiddlePanel();
+                    addItemsFromDBtoList();
+                    addItemsToMiddlePanel();
+
                     System.err.println(listWithAddeditems.size());
                     amount.setText("");
                     buyPrice.setText("");
-                    addListenersToMiddlePanelItems();
+                    stopUpdate = true;
+                    updateValues();
+                    stopUpdate = false;
+                    repaint();
 
                 }catch (Exception e){
                     if(textBox==0)amount.setBackground(Colors.redLite);
@@ -212,56 +223,24 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
                 repaint();
             }
         });
-        addListenersToMiddlePanelItems();
-    }
 
-    private void addListenersToMiddlePanelItems() {
-        if(listWithAddeditems !=null) {
-            System.out.println(listWithAddeditems.size());
-            for (ipos = 0; ipos < listWithAddeditems.size(); ipos++) {
-                ActionListener al = null;
-                try {
-                   al = ((JButton)listWithAddeditems.get(0).get(REMOVEBUTKEY)).getActionListeners()[0];
-                }catch (Exception e){
-                    System.err.println(TAG+"/addListeners../ "+e);
-                }
-
-
-                JButton bt = (JButton)listWithAddeditems.get(ipos).get(REMOVEBUTKEY);
-
-                if(al != null) {
-                    bt.removeActionListener(al);
-                }
-
-                bt.addActionListener(new ActionListener() {
-                    int i =ipos;
-                    @Override
-                    public void actionPerformed(ActionEvent actionEvent) {
-                        if(listWithAddeditems.size()>0) {
-                            listWithAddeditems.remove(listWithAddeditems.get(i));
-                        }
-
-                        numperOfItems=-1;
-                        numperOfItemListeners=-1;
-                        middlePanel.removeAll();
-
-                        addItemsFromlistToDB();
-                        addItemsFromDBtoMiddlePanel();
-                        amount.setText("");
-                        buyPrice.setText("");
-                        addListenersToMiddlePanelItems();
-                        repaint();
-                    }
-                });
+        updateBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                stopUpdate = true;
+                updateValues();
+                stopUpdate = false;
+                repaint();
             }
-        }else System.err.println(TAG+"  listWithAddeditems is Empty!");
+        });
     }
+
 
     private void addItemsFromlistToDB(){
         thl.dropTheTable();
         thl.makeTable();
-        for(HashMap<String, Object> l : listWithAddeditems){
-            thl.putDataInTable(((JTextField)(l.get(PAIRKEY))).getText(),((JTextField)(l.get(AMOUNTKEY))).getText(),((JTextField)(l.get(PRICEKEY))).getText(),(String) l.get(FEEKEY));
+        for(PairItemsPanel l : listWithAddeditems){
+            thl.putDataInTable(l.p1.getText(), l.p2.getText(), l.p3.getText(),l.p4.getText());
         }
     }
 
@@ -281,91 +260,27 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
     }
 
     private void addHintsToMiddlePanelHintPanel() {
-//        System.err.println(((JTextField)listWithAddeditems.get(0).get(PAIRKEY)).getColumns());
-//        System.err.println(((JTextField)listWithAddeditems.get(0).get(PRICEKEY)).getColumns());
-//        System.err.println(((CustTextPane)listWithAddeditems.get(0).get(PROFITKEY)).getWidth());
-        middlePanelHintsPanel.setLayout(null);
-        int colNum = 10;
-        int paneGap = 50;
-        JTextField pairHint = new JTextField();
-        pairHint.setEditable(false);
-        pairHint.setBackground(Colors.white);
-        pairHint.setForeground(Colors.blue);
-        pairHint.setText("Pairs");
-//        pairHint.setColumns(colNum);
-        pairHint.setBorder(BorderFactory.createEmptyBorder());
-//        pairHint.setLayout(null);
-        pairHint.setBounds((sx-(7*108))+colNum,0,100,30);
-
-        JTextField amountHint = new JTextField();
-        amountHint.setEditable(false);
-        amountHint.setBackground(Colors.white);
-        amountHint.setForeground(Colors.blue);
-        amountHint.setText("Amount");
-//        amountHint.setColumns(colNum);
-        amountHint.setBorder(BorderFactory.createEmptyBorder());
-//        amountHint.setLayout(null);
-        amountHint.setBounds((sx-(6*108))+colNum,0,100,30);
-
-        JTextField priceOfOneHint = new JTextField();
-        priceOfOneHint.setEditable(false);
-        priceOfOneHint.setBackground(Colors.white);
-        priceOfOneHint.setForeground(Colors.blue);
-        priceOfOneHint.setText("Bought at $");
-//        priceOfOneHint.setColumns(colNum);
-        priceOfOneHint.setBorder(BorderFactory.createEmptyBorder());
-        priceOfOneHint.setBounds((sx-(5*108))+colNum,0,100,30);
-
-        JTextField profitHint = new JTextField();
-        profitHint.setEditable(false);
-        profitHint.setBackground(Colors.white);
-        profitHint.setForeground(Colors.blue);
-        profitHint.setText("Profit - Loss");
-//        profitHint.setColumns(colNum+2);
-        profitHint.setBorder(BorderFactory.createEmptyBorder());
-
-        profitHint.setBounds((sx-(4*108))+paneGap,0,100,30);
-
-        JTextField howManyHint = new JTextField();
-        howManyHint.setEditable(false);
-        howManyHint.setBackground(Colors.white);
-        howManyHint.setForeground(Colors.blue);
-        howManyHint.setText("Buy more");
-//        howManyHint.setColumns(colNum+2);
-        howManyHint.setBorder(BorderFactory.createEmptyBorder());
-        howManyHint.setBounds((sx-(3*108))+paneGap,0,100,30);
-
-        JTextField totalHint = new JTextField();
-        totalHint.setEditable(false);
-        totalHint.setBackground(Colors.white);
-        totalHint.setForeground(Colors.blue);
-        totalHint.setText("     Total");
-//        totalHint.setColumns(colNum+2);
-        totalHint.setBorder(BorderFactory.createEmptyBorder());
-        totalHint.setBounds((sx-(2*108))+paneGap,0,100,30);
-
-//        JTextField removeHint = new JTextField();
-//        removeHint.setEditable(false);
-//        removeHint.setBackground(Colors.white);
-//        removeHint.setForeground(Colors.blue);
-//        removeHint.setText("      ");
-//        removeHint.setColumns(colNum);
-//        removeHint.setBorder(BorderFactory.createEmptyBorder());
-
-//        pairHint.setBounds(0,0,sx/7,40);
-        middlePanelHintsPanel.add(pairHint);
-//        amountHint.setBounds((sx/7),0,sx/7,40);
-        middlePanelHintsPanel.add(amountHint);
-//        priceOfOneHint.setBounds((sx/7)*2,0,sx/7,40);
-        middlePanelHintsPanel.add(priceOfOneHint);
-//        profitHint.setBounds((sx/7)*3,0,sx/7,40);
-        middlePanelHintsPanel.add(profitHint);
-//        howManyHint.setBounds((sx/7)*4,0,sx/7,40);
-        middlePanelHintsPanel.add(howManyHint);
-//        totalHint.setBounds((sx/7)*5,0,sx/7,40);
-        middlePanelHintsPanel.add(totalHint);
-//        middlePanelHintsPanel.add(removeHint);
-        add(middlePanelHintsPanel);
+        PairItemsPanel middlePanelHint = new PairItemsPanel(this,10000, sx, 40,"Pair", "Amount", "Price/$", "Fee/%");
+        String gap = "     ";
+        middlePanelHint.p5.setText(gap+"Profit");
+        middlePanelHint.p6.setText(gap+"New Buy");
+        middlePanelHint.p7.setText(gap+"Total Now");
+        middlePanelHint.p8.setText("Remove All");
+        middlePanelHint.p8.removeActionListener(middlePanelHint.p8.getActionListeners()[0]);
+        middlePanelHint.p8.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                middlePanel.removeAll();
+                listWithAddeditems = new LinkedList<PairItemsPanel>();
+                addItemsFromlistToDB();
+                stopUpdate = true;
+                updateValues();
+                stopUpdate = false;
+                repaint();
+            }
+        });
+        middlePanelHint.setBounds(0,yGap+40,sx,40);
+        add(middlePanelHint);
         repaint();
     }
 
@@ -381,142 +296,50 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         repaint();
     }
 
-    private void addItemsFromDBtoMiddlePanel(){
-        listWithAddeditems = new LinkedList<HashMap<String, Object>>();
+    private void addItemsFromDBtoList(){
+        listWithAddeditems = new LinkedList<PairItemsPanel>();
         List<List<String>> dbitems = thl.getTableContent();
+        id = 0;
         for(List<String> l:dbitems){
-            addItemsToList(l.get(0),l.get(1),l.get(2), l.get(3));
+            addItemsToList(id,l.get(0),l.get(1),l.get(2), l.get(3));
+            id++;
         }
-        addItemsToMiddlePanel();
+        sortListWithAddeditems();
+        correctIDs();
+    }
+
+    private void sortListWithAddeditems() {
+        listWithAddeditems.sort(new ComparePairItems());
+    }
+
+    private void correctIDs() {
+        id = 0;
+        for(PairItemsPanel l : listWithAddeditems){
+            l.setID(id);
+            id++;
+        }
+    }
+
+    private void addItemsToList(int id, String pairs, String camount, String oprice, String tfee){
+//        listWithAddeditems = new LinkedList<List<Object>>();
+        listWithAddeditems.add(new PairItemsPanel(this, id, sx,30,pairs,camount,oprice,tfee));
     }
 
     private void addItemsToMiddlePanel(){
         if(listWithAddeditems !=null){
-            int height = 40;
-            int cols = 7;
 //            System.out.println(listWithAddeditems.size());
-            for (int i =0; i<listWithAddeditems.size(); i++){
-                if(i>numperOfItems) {
-                    JPanel items = new JPanel();
-                    items.setBounds(0, 0, sx, height);
-//                    items.setLayout(null);
-                    items.setBackground(Colors.white);
-//                    FlowLayout fl = new FlowLayout();
-//                    fl.setHgap(5);
-//                    fl.setAlignment(FlowLayout.LEFT);
-//                    items.setLayout(fl);
-//                    ((JTextField)listWithAddeditems.get(i).get("pairfield")).setColumns(10);
-                    JTextField p1 = (JTextField)listWithAddeditems.get(i).get(PAIRKEY);
-//                    p1.setBounds(0,0,sx/7,height);
-//                    p1.setColumns(cols);
-                    items.add(p1);
-//                System.out.println(l.get(0).getText());
-//                    ((JTextField)listWithAddeditems.get(i).get("amountfield")).setColumns(10);
-                    JTextField p2 = (JTextField)listWithAddeditems.get(i).get(AMOUNTKEY);
-//                    p2.setBounds((sx/7),0,sx/7,height);
-//                    p2.setColumns(cols);
-                    items.add(p2);
-//                    ((JTextField)listWithAddeditems.get(i).get("curPricefield")).setColumns(10);
-                    JTextField p3 = (JTextField)listWithAddeditems.get(i).get(PRICEKEY);
-//                    p3.setBounds((sx/7)*2,0,sx/7,height);
-//                    p3.setColumns(cols);
-                    items.add(p3);
-
-//                    ((CustTextPane)listWithAddeditems.get(i).get("profitpane")).setMaximumSize(panedim);
-                    CustTextPane p4 = (CustTextPane)listWithAddeditems.get(i).get(PROFITKEY);
-                    p4.withDollarSign = true;
-//                    p4.setBounds((sx/7)*3,0,sx/7,height);
-                    items.add(p4);
-//                    ((JButton)listWithAddeditems.get(i).get("removebutton"))
-                    CustTextPane p5 = (CustTextPane)listWithAddeditems.get(i).get(HOWMANYPANEKEY);
-//                    p5.withDollarSign = true;
-//                    p5.setBounds((sx/7)*4,0,sx/7,height);
-                    items.add(p5);
-
-                    CustTextPane p6 = (CustTextPane)listWithAddeditems.get(i).get(HOWMUCHISTOTALPANEKEY);
-                    p6.withDollarSign = true;
-//                    p6.setBounds((sx/7)*5,0,sx/7,height);
-                    items.add(p6);
-
-                    JButton p7 = (JButton)listWithAddeditems.get(i).get(REMOVEBUTKEY);
-//                    p7.setBounds((sx/7)*6,0,sx/7,height);
-                    items.add(p7);
-//                    items.setLayout(null);
-                    middlePanel.add(items);
-                    numperOfItems++;
-                }
-
+            middlePanel.removeAll();
+            for (PairItemsPanel p : listWithAddeditems) {
+//                if(i>numperOfItems) {
+                middlePanel.add(p);
+//                    numperOfItems++;
+//                }
             }
         }
 
     }
 
-    private void addItemsToList(String pairs, String camount, String oprice, String tfee){
-//        listWithAddeditems = new LinkedList<List<Object>>();
-        HashMap<String, Object> map = new HashMap<String, Object>();
 
-        JTextField pair = new JTextField();
-        pair.setEditable(false);
-        pair.setBackground(Colors.white);
-        pair.setText(pairs);
-        pair.setColumns(10);
-        pair.setBorder(BorderFactory.createEmptyBorder());
-
-//        CustTextPane pair = new CustTextPane(pairs,2,"CENTER");
-        map.put(PAIRKEY,pair);
-
-        JTextField amount = new JTextField();
-        amount.setEditable(false);
-        amount.setBackground(Colors.white);
-        amount.setText(camount);
-        amount.setColumns(10);
-        amount.setBorder(BorderFactory.createEmptyBorder());
-//        CustTextPane amount = new CustTextPane(camount,2,"CENTER");
-
-        map.put(AMOUNTKEY,amount);
-
-        JTextField curPrice = new JTextField();
-        curPrice.setEditable(false);
-        curPrice.setBackground(Colors.white);
-        curPrice.setText(oprice);
-        curPrice.setColumns(10);
-        curPrice.setBorder(BorderFactory.createEmptyBorder());
-
-//        CustTextPane curPrice = new CustTextPane(oprice,2,"CENTER");
-
-        map.put(PRICEKEY,curPrice);
-
-//        JTextField profit = new JTextField();
-//        profit.setEditable(false);
-//        profit.setBackground(Colors.white);
-//        profit.setText("Calculating");
-//        profit.setColumns(10);
-
-        CustTextPane profit = new CustTextPane("0",1,"LEFT");
-
-        map.put(PROFITKEY,profit);
-
-        CustTextPane howManyCanBuy = new CustTextPane("0", 1, "LEFT");
-        howManyCanBuy.withDollarSign=false;
-        map.put(HOWMANYPANEKEY, howManyCanBuy);
-
-        CustTextPane howMuchTotalIs = new CustTextPane("0", 1,"LEFT");
-        map.put(HOWMUCHISTOTALPANEKEY, howMuchTotalIs);
-
-        JButton remove = new JButton();
-//        remove.setEditable(false);
-        remove.setForeground(Colors.red);
-        remove.setBackground(Colors.white);
-        remove.setText("Remove");
-//        remove.setColumns(10);
-
-        remove.setBorder(BorderFactory.createEmptyBorder());
-
-//        CustTextPane remove = new CustTextPane("Remove",2,"CENTER");
-        map.put(REMOVEBUTKEY,remove);
-        map.put(FEEKEY,new String(tfee));
-        listWithAddeditems.add(map);
-    }
 
     private void makeTopPanel() {
         JPanel userInputPanel = new JPanel();
@@ -593,6 +416,19 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         thl.updateTotalAmountBought(listWithAddeditems, totalAmountBoughtPane, totalAmountBoughtGBP);
     }
 
+    public void removePanelFromMiddlePanel(int id) {
+//        middlePanel.remove(listWithAddeditems.get(id));
+        listWithAddeditems.remove(id);
+        addItemsFromlistToDB();
+        addItemsFromDBtoList();
+        addItemsToMiddlePanel();
+        amount.setText("G");
+        amount.setText("");
+        stopUpdate = true;
+        updateValues();
+        stopUpdate = false;
+        repaint();
+    }
 
 
     @Override
@@ -605,7 +441,9 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         }
         while (windowsStates[windowNumber[0]]) {
             try {
-                updateValues();
+                if(!stopUpdate) {
+                    updateValues();
+                }
                 checkState(this);
                 repaint();
                 Thread.sleep(1500);
