@@ -9,10 +9,10 @@ import java.awt.event.ActionListener;
 
 public class PairItemsPanel extends JPanel {
     private final int fieldwidth = 7;
-    public JTextField p1;
-    public JTextField p2;
-    public JTextField p3;
-    public JTextField p4;
+    public CustTextPane p1;
+    public CustTextPane p2;
+    public CustTextPane p3;
+    public CustTextPane p4;
     public CustTextPane p5;
     public CustTextPane p6;
     public CustTextPane p7;
@@ -32,7 +32,7 @@ public class PairItemsPanel extends JPanel {
 //                    fl.setAlignment(FlowLayout.LEFT);
 //                    items.setLayout(fl);
 //                    ((JTextField)listWithAddeditems.get(i).get("pairfield")).setColumns(10);
-        p1 = new JTextField();
+        p1 = new CustTextPane("0",2,"LEFT");
         p1.setEditable(false);
         p1.setBackground(Colors.white);
         p1.setForeground(Colors.blue);
@@ -45,7 +45,7 @@ public class PairItemsPanel extends JPanel {
         add(p1);
 //                System.out.println(l.get(0).getText());
 //                    ((JTextField)listWithAddeditems.get(i).get("amountfield")).setColumns(10);
-        p2 = new JTextField();
+        p2 = new CustTextPane("0",2,"LEFT");
         p2.setEditable(false);
         p2.setBackground(Colors.white);
         p2.setForeground(Colors.blue);
@@ -57,7 +57,7 @@ public class PairItemsPanel extends JPanel {
 
         add(p2);
 //                    ((JTextField)listWithAddeditems.get(i).get("curPricefield")).setColumns(10);
-        p3 = new JTextField();
+        p3 = new CustTextPane("0",2,"LEFT");
         p3.setEditable(false);
         p3.setBackground(Colors.white);
         p3.setForeground(Colors.blue);
@@ -69,7 +69,7 @@ public class PairItemsPanel extends JPanel {
 //                    p3.setColumns(cols);
         add(p3);
 
-        p4 = new JTextField();
+        p4 = new CustTextPane("0",2,"LEFT");
         p4.setEditable(false);
         p4.setBackground(Colors.white);
         p4.setForeground(Colors.blue);
@@ -85,12 +85,14 @@ public class PairItemsPanel extends JPanel {
         p5 = new CustTextPane("0",1,"LEFT");
         p5.setForeground(Colors.blue);
         p5.withDollarSign = true;
+        p5.copyOnClick();
 //        p5.setBounds((width-(4*90)),0,90,30);
 //        p4.setBounds((width/7)*3,0,width/7,height);
         add(p5);
 //                    ((JButton)listWithAddeditems.get(i).get("removebutton"))
         p6 = new CustTextPane("0", 1, "LEFT");
         p6.setForeground(Colors.blue);
+        p6.copyOnClick();
 //        p6.setBounds((width-(3*90)),0,90,30);
 //        p5.withDollarSign = true;
 //        p5.setBounds((width/7)*4,0,width/7,height);
@@ -99,6 +101,7 @@ public class PairItemsPanel extends JPanel {
         p7 = new CustTextPane("0", 1,"LEFT");
         p7.setForeground(Colors.blue);
         p7.withDollarSign = true;
+        p7.copyOnClick();
 //        p7.setBounds((width-(2*90)),0,90,30);
 //                    p6.setBounds((sx/7)*5,0,sx/7,height);
         add(p7);

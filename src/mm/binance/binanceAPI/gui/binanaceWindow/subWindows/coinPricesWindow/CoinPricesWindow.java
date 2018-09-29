@@ -155,6 +155,7 @@ public class CoinPricesWindow extends CustFrame implements Runnable{
                     CustTextPane pText = new CustTextPane(market.get(coin) + "", 1, "LEFT");
                     pText.withDollarSign = true;
                     pText.setBounds(120, 0, 120, 40);
+                    pText.copyOnClick();
                     jp.add(pText);
                     coinNpaneMap.put(coin, pText);
                     if (progress[0] < 100)

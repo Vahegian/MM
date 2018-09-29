@@ -143,9 +143,7 @@ public class LoginWindow extends InfoFrame {
         passhint.setForeground(Colors.blue);
         passhint.setEditable(false);
         passhint.setBounds(0,100,100,50);
-        mainPanel.add(namehint);
-        mainPanel.add(userhint);
-        mainPanel.add(passhint);
+
 
         dbName = new JTextField();
         dbName.setBounds(100,0,140,50);
@@ -154,9 +152,12 @@ public class LoginWindow extends InfoFrame {
         dbPassword = new JPasswordField();
         dbPassword.setBounds(100,100,140,50);
 
+        mainPanel.add(namehint);
         mainPanel.add(dbName);
+        mainPanel.add(userhint);
         mainPanel.add(dbUser);
         mainPanel.add(dbPassword);
+        mainPanel.add(passhint);
     }
 
     private void makeTopButtons() {

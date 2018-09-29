@@ -5,10 +5,17 @@ and makes it easy to change color of the text and the text itself by method call
 
 package mm.customObjects;
 
+import mm.Main;
+import mm.startGui.RunTimeInfoWindow;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.text.DecimalFormat;
-import java.util.Objects;
+import java.awt.datatransfer.Clipboard;
+
 
 public class CustTextPane extends JTextField {
     private String color = "black";
@@ -19,6 +26,7 @@ public class CustTextPane extends JTextField {
     public boolean withDollarSign = false;
     public boolean withPoundSign = false;
     private Color colorObject;
+    private CustTextPane I = this;
 
     public CustTextPane(String tx, int type, String alignment){
         this.text = tx;
@@ -98,5 +106,53 @@ public class CustTextPane extends JTextField {
         if(type==1)
             Triangles.draw(g,10,6,dir);
 
+    }
+
+    public void copyOnClick(){
+        this.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Toolkit toolkit = Toolkit.getDefaultToolkit();
+                Clipboard clipboard = toolkit.getSystemClipboard();
+
+                clipboard.setContents(new StringSelection(text), null);
+                RunTimeInfoWindow rtiw = new RunTimeInfoWindow(0,0);
+                rtiw.setInfo("Copied! ", text);
+
+                Main.workers.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            Main.plusThread();
+                            Thread.sleep(1000);
+                            rtiw.dispose();
+                            Main.minusThread();
+                        } catch (InterruptedException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                I.setBackground(Colors.lightBlue);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                I.setBackground(Colors.white);
+            }
+        });
     }
 }

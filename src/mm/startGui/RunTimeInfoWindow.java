@@ -10,8 +10,8 @@ public class RunTimeInfoWindow extends InfoFrame {
     private final JTextArea hint;
     private final JTextArea value;
 
-    public RunTimeInfoWindow() {
-        super("Info", Toolkit.getDefaultToolkit().getScreenSize().width/2-120,Toolkit.getDefaultToolkit().getScreenSize().height-30, 240, 30);
+    public RunTimeInfoWindow(int lx, int ly) {
+        super("Info", lx, ly,240, 30);
         mainPanel = new JPanel();
         mainPanel.setBounds(0,0,sx,sy);
         mainPanel.setBackground(Colors.white);

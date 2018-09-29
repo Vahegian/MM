@@ -37,7 +37,7 @@ public class Main {
             @Override
             public void run() {
                 threadCount[0]+=1;
-                RunTimeInfoWindow rtif = new RunTimeInfoWindow();
+                RunTimeInfoWindow rtif = new RunTimeInfoWindow(Toolkit.getDefaultToolkit().getScreenSize().width/2-120,Toolkit.getDefaultToolkit().getScreenSize().height-30);
                 while (true){
                     synchronized (threadCount) {
                         rtif.setInfo("Threads used from the pool: ", threadCount[0]+"");
