@@ -65,12 +65,12 @@ public class TradeHelperLogic implements Runnable {
         Double total = value-amountOfFee;
 //        System.out.println(pair+" : "+total+" FEE ->"+amountOfFee);
         if(total>0){
-            profit.setPaneText(total+"");
-            profit.setPaneColor(Colors.green, "green");
+            profit.setFieldText(total+"");
+            profit.setFieldColor(Colors.green, "green");
         }else if(total<0){
 //            total*=-1;
-            profit.setPaneText(total+"");
-            profit.setPaneColor(Colors.red, "red");
+            profit.setFieldText(total+"");
+            profit.setFieldColor(Colors.red, "red");
         }
     }
 
@@ -88,9 +88,9 @@ public class TradeHelperLogic implements Runnable {
 //            System.out.println(price);
             totalProfit+= Double.parseDouble(price);
         }
-        totalProfitPane.setPaneText(totalProfit.toString());
-        if(totalProfit>0) totalProfitPane.setPaneColor(Colors.green,"green");
-        else if(totalProfit<0)totalProfitPane.setPaneColor(Colors.red,"red");
+        totalProfitPane.setFieldText(totalProfit.toString());
+        if(totalProfit>0) totalProfitPane.setFieldColor(Colors.green,"green");
+        else if(totalProfit<0)totalProfitPane.setFieldColor(Colors.red,"red");
         else totalProfitPane.setBackground(Colors.black);
 
     }
@@ -108,10 +108,10 @@ public class TradeHelperLogic implements Runnable {
             totalAmount+= Double.parseDouble(amount)*newPrice;
         }
         String price = totalAmount.toString();
-        totalAmountPane.setPaneText(price);
-        if(totalAmount>updateTotalAmountNowtemp) totalAmountPane.setPaneColor(Colors.green,"green");
-        else if(totalAmount<updateTotalAmountNowtemp)totalAmountPane.setPaneColor(Colors.red,"red");
-        else totalAmountPane.setPaneColor(Colors.black, "black");
+        totalAmountPane.setFieldText(price);
+        if(totalAmount>updateTotalAmountNowtemp) totalAmountPane.setFieldColor(Colors.green,"green");
+        else if(totalAmount<updateTotalAmountNowtemp)totalAmountPane.setFieldColor(Colors.red,"red");
+        else totalAmountPane.setFieldColor(Colors.black, "black");
         updateTotalAmountNowtemp = totalAmount;
     }
 
@@ -126,7 +126,7 @@ public class TradeHelperLogic implements Runnable {
         totalAmountBoughtPane.setText("$"+new DecimalFormat("#0.00000").format(totalAmountBought));
         totalAmountBoughtPane.setForeground(Colors.blue);
         try {
-            totalboughtGBP.setPaneText(currencyConverter.convertCurrency(totalAmountBought.floatValue()).toString());
+            totalboughtGBP.setFieldText(currencyConverter.convertCurrency(totalAmountBought.floatValue()).toString());
             totalboughtGBP.setForeground(Colors.blue);
         } catch (CurrencyConverterException e) {
             e.printStackTrace();
@@ -147,12 +147,12 @@ public class TradeHelperLogic implements Runnable {
     private void setHowManyCanBuyPaneText(Object o, Double total) {
         CustTextPane quantity =(CustTextPane) o;
         if(total>0){
-            quantity.setPaneText(total+"");
-            quantity.setPaneColor(Colors.green, "green");
+            quantity.setFieldText(total+"");
+            quantity.setFieldColor(Colors.green, "green");
         }else if(total<0){
 //            total*=-1;
-            quantity.setPaneText("0");
-            quantity.setPaneColor(Colors.red, "red");
+            quantity.setFieldText("0");
+            quantity.setFieldColor(Colors.red, "red");
         }
     }
 
@@ -172,13 +172,13 @@ public class TradeHelperLogic implements Runnable {
         }
 
         if(total>tempHowMuchIsTotal.get(pairkey)){
-            totalOfaRow.setPaneText(total+"");
-            totalOfaRow.setPaneColor(Colors.green, "green");
+            totalOfaRow.setFieldText(total+"");
+            totalOfaRow.setFieldColor(Colors.green, "green");
         }else if(total< tempHowMuchIsTotal.get(pairkey)){
 //            total*=-1;
-            totalOfaRow.setPaneText(total+"");
-            totalOfaRow.setPaneColor(Colors.red, "red");
-        }else totalOfaRow.setPaneColor(Colors.black,"black");
+            totalOfaRow.setFieldText(total+"");
+            totalOfaRow.setFieldColor(Colors.red, "red");
+        }else totalOfaRow.setFieldColor(Colors.black,"black");
         tempHowMuchIsTotal.replace(pairkey, total);
     }
 
@@ -186,10 +186,10 @@ public class TradeHelperLogic implements Runnable {
         float totalprofit = (float) Double.parseDouble(totalProfitPane.getPlainText());
         float totalamount = (float) Double.parseDouble(totalAmountNowPane.getPlainText());
         try {
-            totalprofitgbp.setPaneText(currencyConverter.convertCurrency(totalprofit).toString());
-            totalprofitgbp.setPaneColor((Color)totalProfitPane.getColors()[0], (String) totalProfitPane.getColors()[1]);
-            totalamountgbp.setPaneText(currencyConverter.convertCurrency(totalamount).toString());
-            totalamountgbp.setPaneColor((Color)totalAmountNowPane.getColors()[0], (String) totalAmountNowPane.getColors()[1]);
+            totalprofitgbp.setFieldText(currencyConverter.convertCurrency(totalprofit).toString());
+            totalprofitgbp.setFieldColor((Color)totalProfitPane.getColors()[0], (String) totalProfitPane.getColors()[1]);
+            totalamountgbp.setFieldText(currencyConverter.convertCurrency(totalamount).toString());
+            totalamountgbp.setFieldColor((Color)totalAmountNowPane.getColors()[0], (String) totalAmountNowPane.getColors()[1]);
         } catch (CurrencyConverterException e) {
             e.printStackTrace();
         }

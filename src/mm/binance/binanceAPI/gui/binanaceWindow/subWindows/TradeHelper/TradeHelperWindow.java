@@ -131,11 +131,11 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         totalProfitHintArea.setEditable(false); totalProfitHintArea.setVisible(true);
 
         totalProfitPane = new CustTextPane("0",1,"LEFT" );
-        totalProfitPane.setPaneColor(Colors.green,"green");
+        totalProfitPane.setFieldColor(Colors.green,"green");
         totalProfitPane.withDollarSign = true;
 
         totalProfitPaneGBP = new CustTextPane("0",1,"LEFT");
-        totalProfitPaneGBP.setPaneColor(Colors.green,"green");
+        totalProfitPaneGBP.setFieldColor(Colors.green,"green");
         totalProfitPaneGBP.withPoundSign = true;
 
         JTextArea totalAmountNowHintArea = new JTextArea();

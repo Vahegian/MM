@@ -41,11 +41,11 @@ public class CustTextPane extends JTextField {
 //        if(align.equals("CENTER"))
 //            setContentType("text/html");
 
-        setPaneText(text);
+        setFieldText(text);
 
     }
 
-    public void setPaneText(String tx){
+    public void setFieldText(String tx){
 //        if(!withPoundSign && !withDollarSign) withDollarSign = true;
 
         this.text = tx;
@@ -76,7 +76,7 @@ public class CustTextPane extends JTextField {
         }
     }
 
-    public void setPaneColor(Color col, String color){
+    public void setFieldColor(Color col, String color){
         colorObject = col;
         this.color = color;
         if(align.equals("LEFT")) {

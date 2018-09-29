@@ -135,16 +135,16 @@ public class CoinCapWindow extends CustFrame implements Runnable {
 
             if(prevPricesMap.get(coin) < price){
                 prevPricesMap.replace(coin, price);
-                ctp.setPaneColor(Colors.green, "green");
+                ctp.setFieldColor(Colors.green, "green");
             }else if(prevPricesMap.get(coin) > price){
                 prevPricesMap.replace(coin, price);
-                ctp.setPaneColor(Colors.red, "red");
+                ctp.setFieldColor(Colors.red, "red");
             }
             else {
                 prevPricesMap.replace(coin, price);
-                ctp.setPaneColor(Colors.black, "black");
+                ctp.setFieldColor(Colors.black, "black");
             }
-            ctp.setPaneText(price+"");
+            ctp.setFieldText(price+"");
         }
 //        System.out.println("Updated");
 
@@ -173,7 +173,7 @@ public class CoinCapWindow extends CustFrame implements Runnable {
             jp.setLayout(null);
             CustTextPane cText = new CustTextPane(coin,2, "LEFT");
             cText.setBounds(0,0,120,40);
-            cText.setPaneColor(Colors.blue, "blue");
+            cText.setFieldColor(Colors.blue, "blue");
             jp.add(cText);
 
             try {
