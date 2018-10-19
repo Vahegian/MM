@@ -118,20 +118,8 @@ public class CustTextPane extends JTextField {
                 clipboard.setContents(new StringSelection(text), null);
                 RunTimeInfoWindow rtiw = new RunTimeInfoWindow(0,0);
                 rtiw.setInfo("Copied! ", text);
+                rtiw.goAway(1000);
 
-                Main.workers.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            Main.plusThread();
-                            Thread.sleep(1000);
-                            rtiw.dispose();
-                            Main.minusThread();
-                        } catch (InterruptedException e1) {
-                            e1.printStackTrace();
-                        }
-                    }
-                });
             }
 
             @Override

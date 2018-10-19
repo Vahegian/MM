@@ -1,5 +1,6 @@
 package mm.startGui;
 
+import mm.Main;
 import mm.customObjects.Colors;
 
 import javax.swing.*;
@@ -9,6 +10,7 @@ public class RunTimeInfoWindow extends InfoFrame {
     private final JPanel mainPanel;
     private final JTextArea hint;
     private final JTextArea value;
+    private final RunTimeInfoWindow I = this;
 
     public RunTimeInfoWindow(int lx, int ly) {
         super("Info", lx, ly,240, 30);
@@ -31,5 +33,21 @@ public class RunTimeInfoWindow extends InfoFrame {
         this.hint.setText(hint);
         this.value.setText(value);
         repaint();
+    }
+
+    public void goAway(int i) {
+        Main.workers.execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Main.plusThread();
+                    Thread.sleep(i);
+                    I.dispose();
+                    Main.minusThread();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
     }
 }
