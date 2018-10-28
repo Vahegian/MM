@@ -38,6 +38,7 @@ public class PairItemsPanel extends JPanel {
         p1.setForeground(Colors.blue);
         p1.setText(s1);
         p1.setColumns(fieldwidth);
+        p1.moreOnClick(this);
 //        p1.setBounds((width-(8*90)),0,90,30);
         p1.setBorder(BorderFactory.createEmptyBorder());
 //        p1.setBounds(0,0,width/7,height);
@@ -126,6 +127,9 @@ public class PairItemsPanel extends JPanel {
         });
     }
 
+    public CustTextPane getAmountPane(){return p2;}
+    public CustTextPane getPricePane(){return p3;}
+    public CustTextPane getFeePane(){return p4;}
     public PairItemsPanel(){}
 
     public void setID(int id) {

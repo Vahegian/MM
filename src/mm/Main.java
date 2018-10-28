@@ -13,7 +13,7 @@ public class Main {
     public static final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
     public static void main(String[] args){
 //      code is optimised for CPU with 2 Cores and 2.7GHz per core
-        workers = Executors.newFixedThreadPool(10);
+        workers = Executors.newFixedThreadPool(15);
         startCountingThreads();
         new LoginWindow("LogIn", dim.width/2, dim.height/2);
 //        new MainFrame();

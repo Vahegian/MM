@@ -60,9 +60,9 @@ public class TradeHelperLogic implements Runnable {
 
     private void updateProfitOfaRow(String pair, Double amount, Double price, Double fee, CustTextPane profit){
         Double newPrice = lastPrices.get(pair);
-        Double value = (newPrice*amount)-(price*amount);
-        Double amountOfFee = (fee/100)*value;
-        Double total = value-amountOfFee;
+        Double profitBeforeFee = (newPrice*amount)-(price*amount);
+        Double amountOfFee = (fee/100)*profitBeforeFee;
+        Double total = profitBeforeFee-amountOfFee;
 //        System.out.println(pair+" : "+total+" FEE ->"+amountOfFee);
         if(total>0){
             profit.setFieldText(total+"");
