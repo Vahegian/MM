@@ -23,6 +23,7 @@ public class Colors implements Runnable {
     public static Color blue = new Color(94,143,230);
     public static Color greenLight = new Color(189,240,160);
     public static Color lightBlue = new Color(205,224,244);
+    public static Color binanceYellow = new Color(244, 187, 45);
 
 
     public Color randomColor(){

@@ -19,8 +19,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 public class CoinCapWindow extends CustFrame implements Runnable {
     private String TAG = "CoinCapWindows";
@@ -150,6 +150,12 @@ public class CoinCapWindow extends CustFrame implements Runnable {
 
     }
 
+    private java.util.List<String> sortPairs(Set<String> keySet) {
+        List<String> sl = new LinkedList<String>(keySet);
+        Collections.sort(sl);
+        return sl;
+    }
+
     /*
     gets coin map from "CoinCollector"
     puts coin name and current price in different "JTextPane"s
@@ -166,7 +172,7 @@ public class CoinCapWindow extends CustFrame implements Runnable {
 
         market = cc.getMarkets();
 
-        for (String coin : market.keySet()) {
+        for (String coin : sortPairs(market.keySet())) {
             JPanel jp = new JPanel();
             jp.setBackground(Colors.white);
 //            jp.setLayout(new FlowLayout(FlowLayout.LEFT, 40,0));

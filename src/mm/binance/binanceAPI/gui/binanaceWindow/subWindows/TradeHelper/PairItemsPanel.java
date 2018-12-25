@@ -4,11 +4,14 @@ import mm.customObjects.Colors;
 import mm.customObjects.CustTextPane;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class PairItemsPanel extends JPanel {
     private final int fieldwidth = 7;
+    private Color colors_background;
+    private Color colors_foreground;
     public CustTextPane p1;
     public CustTextPane p2;
     public CustTextPane p3;
@@ -20,9 +23,11 @@ public class PairItemsPanel extends JPanel {
     private PairItemsPanel I = this;
     private int ID;
     private TradeHelperWindow thw;
-    public PairItemsPanel(TradeHelperWindow thw, int id, int width, int height, String s1, String s2, String s3, String s4){
+    public PairItemsPanel(TradeHelperWindow thw, int id, int width, int height, String s1, String s2, String s3, String s4, Color back, Color fore){
         this.ID = id;
         this.thw = thw;
+        this.colors_background = back;
+        this.colors_foreground = fore;
         setBounds(0, 0, width, height);
 //        setLayout(null);
 //                    items.setLayout(null);
@@ -34,8 +39,8 @@ public class PairItemsPanel extends JPanel {
 //                    ((JTextField)listWithAddeditems.get(i).get("pairfield")).setColumns(10);
         p1 = new CustTextPane("0",2,"LEFT");
         p1.setEditable(false);
-        p1.setBackground(Colors.white);
-        p1.setForeground(Colors.blue);
+        p1.setBackground(colors_background);
+        p1.setForeground(colors_foreground);
         p1.setText(s1);
         p1.setColumns(fieldwidth);
         p1.moreOnClick(this);
@@ -48,8 +53,8 @@ public class PairItemsPanel extends JPanel {
 //                    ((JTextField)listWithAddeditems.get(i).get("amountfield")).setColumns(10);
         p2 = new CustTextPane("0",2,"LEFT");
         p2.setEditable(false);
-        p2.setBackground(Colors.white);
-        p2.setForeground(Colors.blue);
+        p2.setBackground(colors_background);
+        p2.setForeground(colors_foreground);
         p2.setText(s2);
         p2.setColumns(fieldwidth);
 //        p2.setBounds((width-(7*90)),0,90,30);
@@ -60,8 +65,8 @@ public class PairItemsPanel extends JPanel {
 //                    ((JTextField)listWithAddeditems.get(i).get("curPricefield")).setColumns(10);
         p3 = new CustTextPane("0",2,"LEFT");
         p3.setEditable(false);
-        p3.setBackground(Colors.white);
-        p3.setForeground(Colors.blue);
+        p3.setBackground(colors_background);
+        p3.setForeground(colors_foreground);
         p3.setText(s3);
         p3.setColumns(fieldwidth);
 //        p3.setBounds((width-(6*90)),0,90,30);
@@ -72,8 +77,8 @@ public class PairItemsPanel extends JPanel {
 
         p4 = new CustTextPane("0",2,"LEFT");
         p4.setEditable(false);
-        p4.setBackground(Colors.white);
-        p4.setForeground(Colors.blue);
+        p4.setBackground(colors_background);
+        p4.setForeground(colors_foreground);
         p4.setText(s4);
         p4.setColumns(3);
 //        p4.setBounds((width-(5*90)),0,90,30);
@@ -84,7 +89,7 @@ public class PairItemsPanel extends JPanel {
 
 //                    ((CustTextPane)listWithAddeditems.get(i).get("profitpane")).setMaximumSize(panedim);
         p5 = new CustTextPane("0",1,"LEFT");
-        p5.setForeground(Colors.blue);
+        p5.setForeground(colors_foreground);
         p5.withDollarSign = true;
         p5.copyOnClick();
 //        p5.setBounds((width-(4*90)),0,90,30);
@@ -92,7 +97,7 @@ public class PairItemsPanel extends JPanel {
         add(p5);
 //                    ((JButton)listWithAddeditems.get(i).get("removebutton"))
         p6 = new CustTextPane("0", 1, "LEFT");
-        p6.setForeground(Colors.blue);
+        p6.setForeground(colors_foreground);
         p6.copyOnClick();
 //        p6.setBounds((width-(3*90)),0,90,30);
 //        p5.withDollarSign = true;
@@ -100,7 +105,7 @@ public class PairItemsPanel extends JPanel {
         add(p6);
 
         p7 = new CustTextPane("0", 1,"LEFT");
-        p7.setForeground(Colors.blue);
+        p7.setForeground(colors_foreground);
         p7.withDollarSign = true;
         p7.copyOnClick();
 //        p7.setBounds((width-(2*90)),0,90,30);
@@ -110,7 +115,7 @@ public class PairItemsPanel extends JPanel {
         p8 = new JButton();
 //        remove.setEditable(false);
         p8.setForeground(Colors.red);
-        p8.setBackground(Colors.white);
+        p8.setBackground(colors_background);
         p8.setText("Remove");
 //        remove.setColumns(10);
 //        p8.setBounds((width-(90)),0,90,30);

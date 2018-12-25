@@ -36,14 +36,14 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
     private CustTextPane totalAmountNowPane;
     private CustTextPane totalAmountBoughtPane;
 
-    static final String PAIRKEY="pairfield";
-    static final String AMOUNTKEY="amountfield";
-    static final String PRICEKEY="curPricefield";
-    static final String PROFITKEY="profitpane";
-    static final String REMOVEBUTKEY="removebutton";
-    static final String FEEKEY="fee";
-    static final String HOWMANYPANEKEY = "howmanymore";
-    static final String HOWMUCHISTOTALPANEKEY = "rowtotal";
+//    static final String PAIRKEY="pairfield";
+//    static final String AMOUNTKEY="amountfield";
+//    static final String PRICEKEY="curPricefield";
+//    static final String PROFITKEY="profitpane";
+//    static final String REMOVEBUTKEY="removebutton";
+//    static final String FEEKEY="fee";
+//    static final String HOWMANYPANEKEY = "howmanymore";
+//    static final String HOWMUCHISTOTALPANEKEY = "rowtotal";
     private CustTextPane totalProfitPaneGBP;
     private CustTextPane totalAmountNowPaneGBP;
     private CustTextPane totalAmountBoughtGBP;
@@ -260,7 +260,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
     }
 
     private void addHintsToMiddlePanelHintPanel() {
-        PairItemsPanel middlePanelHint = new PairItemsPanel(this,10000, sx, 40,"Pair", "Amount", "Price/$", "Fee/%");
+        PairItemsPanel middlePanelHint = new PairItemsPanel(this,10000, sx, 40,"Pair", "Amount", "Price/$", "Fee/%", Colors.white, Colors.blue);
         String gap = "     ";
         middlePanelHint.p5.setText(gap+"Profit");
         middlePanelHint.p6.setText(gap+"New Buy");
@@ -322,7 +322,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
 
     private void addItemsToList(int id, String pairs, String camount, String oprice, String tfee){
 //        listWithAddeditems = new LinkedList<List<Object>>();
-        listWithAddeditems.add(new PairItemsPanel(this, id, sx,30,pairs,camount,oprice,tfee));
+        listWithAddeditems.add(new PairItemsPanel(this, id, sx,30,pairs,camount,oprice,tfee,Colors.white, Colors.blue));
     }
 
     private void addItemsToMiddlePanel(){
@@ -416,7 +416,7 @@ public class TradeHelperWindow extends CustFrame implements Runnable{
         thl.updateTotalAmountBought(listWithAddeditems, totalAmountBoughtPane, totalAmountBoughtGBP);
     }
 
-    public void removePanelFromMiddlePanel(int id) {
+    void removePanelFromMiddlePanel(int id) {
 //        middlePanel.remove(listWithAddeditems.get(id));
         listWithAddeditems.remove(id);
         addItemsFromlistToDB();
