@@ -1,7 +1,9 @@
 package mm.binance.binanceAPI.gui.binanaceWindow.subWindows.coinPricesWindow;
 
+import javafx.print.Collation;
 import mm.Main;
 import mm.binance.binanceAPI.BinanceController;
+import mm.binance.binanceAPI.gui.binanaceWindow.subWindows.TradeHelper.ComparePairItems;
 import mm.customObjects.Colors;
 import mm.customObjects.CustButton;
 import mm.customObjects.CustTextPane;
@@ -13,8 +15,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 public class CoinPricesWindow extends CustFrame implements Runnable{
     private String TAG = "BinanceWindow\\subWindows\\CoinPricesWindow";
@@ -125,6 +127,12 @@ public class CoinPricesWindow extends CustFrame implements Runnable{
 
     }
 
+    private List<String> sortPairs(Set<String> keySet) {
+        List<String> sl = new LinkedList<String>(keySet);
+        Collections.sort(sl);
+        return sl;
+    }
+
     /*
     gets coin map from "BinanceController"
     puts coin name and current price in different "JTextPane"s
@@ -141,7 +149,7 @@ public class CoinPricesWindow extends CustFrame implements Runnable{
 
         market = bc.getLastPrices();
         try {
-            for (String coin : market.keySet()) {
+            for (String coin : sortPairs(market.keySet())) {
                 JPanel jp = new JPanel();
                 jp.setBackground(Colors.white);
 //            jp.setLayout(new FlowLayout(FlowLayout.LEFT, 40,0));
