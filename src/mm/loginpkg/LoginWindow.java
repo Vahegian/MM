@@ -21,7 +21,7 @@ public class LoginWindow extends InfoFrame {
     private JPasswordField dbPassword;
     private LoginWindow me = this;
     private int fields = 1;
-    Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+    private Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 
 
     public LoginWindow(String title, int lx, int ly) {
@@ -41,6 +41,7 @@ public class LoginWindow extends InfoFrame {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        dbName.requestFocus();
         repaint();
     }
 
@@ -49,6 +50,46 @@ public class LoginWindow extends InfoFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 login();
+            }
+        });
+
+        dbName.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_DOWN){
+                    dbUser.requestFocus();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+
+        dbUser.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_DOWN){
+                    dbPassword.requestFocus();
+                }else if(e.getKeyCode()==KeyEvent.VK_UP){
+                    dbName.requestFocus();
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
             }
         });
 
@@ -62,6 +103,8 @@ public class LoginWindow extends InfoFrame {
             public void keyPressed(KeyEvent e) {
                 if(e.getKeyCode() == KeyEvent.VK_ENTER){
                     login();
+                }else if(e.getKeyCode() == KeyEvent.VK_UP){
+                    dbUser.requestFocus();
                 }
 
 //                if(e.getKeyCode() == KeyEvent.VK_DOWN){
@@ -83,12 +126,6 @@ public class LoginWindow extends InfoFrame {
             }
         });
 
-//        dbPassword.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//
-//            }
-//        });
     }
 
     private void login() {
@@ -127,6 +164,7 @@ public class LoginWindow extends InfoFrame {
     private void makeMainPanel() {
         mainPanel = new JPanel();
         mainPanel.setBounds(0,50,sx,150);
+        mainPanel.setLayout(null);
 
         JTextArea namehint = new JTextArea("\ndb Name:");
         namehint.setBackground(Colors.white);
@@ -147,6 +185,8 @@ public class LoginWindow extends InfoFrame {
 
         dbName = new JTextField();
         dbName.setBounds(100,0,140,50);
+
+
         dbUser = new JTextField();
         dbUser.setBounds(100,50,140,50);
         dbPassword = new JPasswordField();

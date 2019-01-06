@@ -19,10 +19,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 import java.util.List;
 
 public class CoinCapWindow extends CustFrame implements Runnable {
+    private CustButton addCoinsBut;
+    private CustButton refreshBut;
     private String TAG = "CoinCapWindows";
     private CoinCollector cc;
     private CoinCapWindow me = this;
@@ -37,21 +41,17 @@ public class CoinCapWindow extends CustFrame implements Runnable {
 //    private boolean loaded = false;
     private boolean showNetworkDialgue = false;
 
-    public CoinCapWindow(String title, int x, int y, DatabaseController database) {
-        super(title, x, y, 240,720);
+    private boolean stopScrolling = false;
+
+    public CoinCapWindow(String title, int x, int y, int Sx, DatabaseController database) {
+        super(title, x, y, Sx,60);
         windowNumber[0]=0;
 
+        addCoinsBut = new CustButton("Add",sx-70,yGap,70,30);
+//        refreshBut = new CustButton("R",sx-70,yGap,70,30);
 
-
-        CustButton addCoinsBut = new CustButton("Add Coins",0,yGap,240,30);
-        CustButton refreshBut = new CustButton("Refresh",0,yGap+35,240,30);
-
-
-
-        addButtonAction(addCoinsBut);
-        addButtonAction(refreshBut);
         add(addCoinsBut);
-        add(refreshBut);
+//        add(refreshBut);
 
 
         Main.workers.submit(new LoadingWindow<>(me));
@@ -80,32 +80,101 @@ public class CoinCapWindow extends CustFrame implements Runnable {
         putCoins();
 
         windowsStates[windowNumber[0]]=true;
+        setBackground(Colors.white);
         setVisible(true);
         repaint();
 
         System.out.println("CoinCapWindow Loaded!");
 //        progress[0]=50;
 
+        addListeners();
+        scrollThroughCoins();
     }
 
-    private void addButtonAction(JButton bt){
-        if(bt.getText().equals("Add Coins")) {
-            bt.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    Main.workers.submit(new AddCoinWindow(dim.width/2, dim.height/2,me, cc));
+    private void scrollThroughCoins() {
+        Main.workers.submit(new Runnable() {
+            @Override
+            public void run() {
+                Main.plusThread();
+                while (!stopScrolling) {
+//                    int max = sp.getHorizontalScrollBar().getMaximum();
+//                    System.out.println(max);
+                    int max = 800;
+                    int delay = 30;
+                    for(int i=0; i<max; i++) {
+                        try {
+//                            System.out.println(i);
+                            if(!stopScrolling) {
+                                sp.getHorizontalScrollBar().setValue(i);
+                                Thread.sleep(delay);
+                            }else break;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    for(int j=max; j>0; j--) {
+                        try {
+                            if(!stopScrolling) {
+                                sp.getHorizontalScrollBar().setValue(j);
+                                if (j == 1) Thread.sleep(2000);
+                                else Thread.sleep(delay);
+                            }else break;
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-            });
-        }else if(bt.getText().equals("Refresh")){
-            bt.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent actionEvent) {
-                    updateCoins();
-                    repaint();
-                    System.out.println("Refreshed!");
-                }
-            });
-        }
+                Main.minusThread();
+            }
+        });
+    }
+
+    private void addListeners(){
+        addCoinsBut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                Main.workers.submit(new AddCoinWindow(dim.width/2, dim.height/2,me, cc));
+            }
+        });
+
+//        refreshBut.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent actionEvent) {
+//                updateCoins();
+//                repaint();
+//                System.out.println("Refreshed!");
+//            }
+//        });
+
+        sp.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                stopScrolling = true;
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                stopScrolling = false;
+                scrollThroughCoins();
+
+            }
+        });
     }
 
     void addNewCoin(){
@@ -168,7 +237,7 @@ public class CoinCapWindow extends CustFrame implements Runnable {
 
         mainPanel = new JPanel();
         mainPanel.setVisible(true);
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.X_AXIS));
 
         market = cc.getMarkets();
 
@@ -176,16 +245,20 @@ public class CoinCapWindow extends CustFrame implements Runnable {
             JPanel jp = new JPanel();
             jp.setBackground(Colors.white);
 //            jp.setLayout(new FlowLayout(FlowLayout.LEFT, 40,0));
-            jp.setLayout(null);
-            CustTextPane cText = new CustTextPane(coin,2, "LEFT");
-            cText.setBounds(0,0,120,40);
-            cText.setFieldColor(Colors.blue, "blue");
+//            jp.setLayout(null);
+            JTextField cText = new JTextField();
+//            cText.setBounds(0,0,120,40);
+            cText.setText(coin);
+            cText.setEditable(false);
+            cText.setBackground(Colors.white);
+            cText.setForeground(Colors.blue);
+            cText.setBorder(BorderFactory.createEmptyBorder());
             jp.add(cText);
 
             try {
                 CustTextPane pText = new CustTextPane(market.get(coin).getPriceUSD() + "", 1, "LEFT");
                 pText.withDollarSign = true;
-                pText.setBounds(120, 0, 120, 40);
+//                pText.setBounds(120, 0, 120, 40);
                 jp.add(pText);
                 coinNpaneMap.put(coin, pText);
 //                synchronized (progress){
@@ -210,12 +283,12 @@ public class CoinCapWindow extends CustFrame implements Runnable {
         }
 
         sp = new JScrollPane(mainPanel);
-        sp.setBounds(0,yGap+70,240,620);
-        sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-
+        sp.setBounds(0,yGap,sx-70,sy);
+        sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sp.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        sp.setBorder(BorderFactory.createEmptyBorder());
         add(sp);
-
+        repaint();
     }
 
     /*
@@ -235,7 +308,7 @@ public class CoinCapWindow extends CustFrame implements Runnable {
                 repaint();
 //            System.out.println("btc");
                 checkState(this);
-                Thread.sleep(1500);
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -244,6 +317,7 @@ public class CoinCapWindow extends CustFrame implements Runnable {
         System.err.println(TAG+" > Main Thread Stopped");
         threadStateToDefault(this);
         cc.state=false;
+        stopScrolling = true;
 //        this.dispose();
         Main.minusThread();
     }

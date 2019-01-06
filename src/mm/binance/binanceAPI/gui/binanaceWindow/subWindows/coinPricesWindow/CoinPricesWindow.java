@@ -153,16 +153,16 @@ public class CoinPricesWindow extends CustFrame implements Runnable{
                 JPanel jp = new JPanel();
                 jp.setBackground(Colors.white);
 //            jp.setLayout(new FlowLayout(FlowLayout.LEFT, 40,0));
-                jp.setLayout(null);
+//                jp.setLayout(null);
                 CustTextPane cText = new CustTextPane(coin, 2, "LEFT");
-                cText.setBounds(0, 0, 120, 40);
+//                cText.setBounds(0, 0, 120, 40);
                 cText.setFieldColor(Colors.blue, "blue");
                 jp.add(cText);
 
                 try {
                     CustTextPane pText = new CustTextPane(market.get(coin) + "", 1, "LEFT");
                     pText.withDollarSign = true;
-                    pText.setBounds(120, 0, 120, 40);
+//                    pText.setBounds(120, 0, 120, 40);
                     pText.copyOnClick();
                     jp.add(pText);
                     coinNpaneMap.put(coin, pText);

@@ -35,7 +35,7 @@ public class OtherButtonsPanel extends JPanel {
         setBackground(Colors.white);
         coinCapBut = new CustButton("CoinCap",10,0,100,30);
         binanceBut = new CustButton("Binance", 120,0,100,30);
-        hitBTCbut = new CustButton("HITBTC", 230,0,100,30);
+        hitBTCbut = new CustButton("CoinBase", 230,0,100,30);
         backupBut = new CustButton("BACKUP", 340,0,100,30);
 //        Main.progress[0] = 75;
 
@@ -78,7 +78,7 @@ public class OtherButtonsPanel extends JPanel {
                     @Override
                     public void run() {
                         if(coinCap==null || !coinCap.isShowing()) {
-                            coinCap = new CoinCapWindow("CoinMarketCap", screenDim[0] + 380, screenDim[1]-420, db);
+                            coinCap = new CoinCapWindow("CoinMarketCap", 0, 0,screenDim[0]*2, db);
                             Main.workers.submit(coinCap);
 //                            new Thread(coinCap).start();
                         }else if(whatToDoIfOpen.equals("FOCUS")){ coinCap.requestFocus();
